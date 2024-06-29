@@ -9,7 +9,7 @@ class InputBox extends StatelessWidget {
   final double? fontSize;
   final double? maxWidth;
   final int? maxLines, maxLength;
-  final void Function(String value)? onChanged;
+  final void Function(String)? onChanged;
   final InputBorder? errorBorder;
   final InputBorder? focusedErrorBorder;
   final TextStyle? errorStyle;

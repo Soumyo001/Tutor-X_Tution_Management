@@ -1,10 +1,12 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tutor_x_tution_management/color_pallete.dart';
 import 'package:tutor_x_tution_management/components/input_box.dart';
+import 'package:tutor_x_tution_management/components/login_signup_button.dart';
 import 'package:tutor_x_tution_management/components/social_button.dart';
 
 class LoginPage extends StatefulWidget {
@@ -100,7 +102,6 @@ class _LoginPageState extends State<LoginPage> {
                           width: 200,
                           height: 150,
                         ),
-                        const Gap(5),
                         const Text(
                           'User Login',
                           style: TextStyle(
@@ -155,24 +156,15 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         const Gap(30),
-                        Container(
-                          padding: const EdgeInsets.all(18),
-                          width: 400,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            gradient: const LinearGradient(
-                              colors: [Pallete.gradiant3, Pallete.gradiant2],
-                            ),
-                          ),
-                          child: const Text(
-                            'Login',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 18,
-                            ),
-                          ),
+                        LogSignButton(
+                          text: 'Sign In',
+                          onTap: () async {
+                            await FirebaseAuth.instance
+                                .signInWithEmailAndPassword(
+                              email: _emailEditingController.text,
+                              password: _passwordEditingController.text,
+                            );
+                          },
                         ),
                         const Gap(40),
                         ConstrainedBox(

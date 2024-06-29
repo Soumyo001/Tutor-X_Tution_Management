@@ -1,18 +1,12 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/Material.dart';
 import 'package:provider/provider.dart';
 import 'package:tutor_x_tution_management/color_pallete.dart';
 import 'package:tutor_x_tution_management/controllers/enum_controller.dart';
 import 'package:tutor_x_tution_management/data/enums.dart';
 
-class RegistrationStudentMedium extends StatefulWidget {
-  const RegistrationStudentMedium({super.key});
+class RegistrationStudentTypes extends StatelessWidget {
+  const RegistrationStudentTypes({super.key});
 
-  @override
-  State<RegistrationStudentMedium> createState() =>
-      _RegistrationStudentMediumState();
-}
-
-class _RegistrationStudentMediumState extends State<RegistrationStudentMedium> {
   @override
   Widget build(BuildContext context) {
     final EnumController enumController = Provider.of<EnumController>(context);
@@ -21,20 +15,19 @@ class _RegistrationStudentMediumState extends State<RegistrationStudentMedium> {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Pallete.gradiant2,
+            color: Pallete.gradiant3,
             borderRadius: BorderRadius.circular(12),
           ),
           child: const Text(
-            'Student Medium: ',
+            'Student Type: ',
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w400,
             ),
           ),
         ),
-        DropdownButton<StudentMedium>(
+        DropdownButton<StudentTypes>(
           borderRadius: BorderRadius.circular(10),
-          style: const TextStyle(fontSize: 12),
           icon: const Icon(
             Icons.arrow_drop_down_rounded,
             color: Pallete.gradiant2,
@@ -47,33 +40,27 @@ class _RegistrationStudentMediumState extends State<RegistrationStudentMedium> {
             ),
           ),
           padding: const EdgeInsets.all(12),
-          value: enumController.studentMedium,
+          value: enumController.studentTypes,
           items: const [
             DropdownMenuItem(
-              value: StudentMedium.bangla,
-              child: Text(
-                'Bangla',
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 17,
-                ),
-              ),
+              value: StudentTypes.kinder_garden,
+              child: Text('Kinder Garden'),
             ),
             DropdownMenuItem(
-              value: StudentMedium.english,
-              child: Text(
-                'English',
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 17,
-                ),
-              ),
+              value: StudentTypes.class_1_to_class_5,
+              child: Text('Class 1 - Class 5'),
+            ),
+            DropdownMenuItem(
+              value: StudentTypes.class_5_to_class_10,
+              child: Text('Class 5 - Class 10'),
+            ),
+            DropdownMenuItem(
+              value: StudentTypes.college_level,
+              child: Text('College'),
             ),
           ],
           onChanged: (value) {
-            setState(() {
-              enumController.studentMedium = value!;
-            });
+            enumController.studentTypes = value!;
           },
         ),
       ],

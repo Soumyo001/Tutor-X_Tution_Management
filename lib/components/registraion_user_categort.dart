@@ -20,7 +20,7 @@ class _RegistrationUserCategoryState extends State<RegistrationUserCategory> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Text(
-          'You are a :',
+          'I am a :',
           style: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 17,

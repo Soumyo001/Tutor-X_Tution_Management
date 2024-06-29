@@ -1,4 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:flutter/Material.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
@@ -92,7 +93,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         Lottie.network(
                           'https://lottie.host/ac73cae1-5b19-42d2-a346-8206be8f61c5/pv8i2EcrQo.json',
                           width: 200,
-                          height: 150,
+                          height: 110,
                         ),
                         const Text(
                           'User Registration',
@@ -106,26 +107,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         enumController.userCategory == UserCategory.student
                             ? const StudentRegistrationForm()
                             : const TutorRegistrationForm(),
-                        const Gap(30),
-                        Container(
-                          padding: const EdgeInsets.all(18),
-                          width: 400,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            gradient: const LinearGradient(
-                              colors: [Pallete.gradiant3, Pallete.gradiant2],
-                            ),
-                          ),
-                          child: const Text(
-                            'Sign Up',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 18,
-                            ),
-                          ),
-                        ),
                         const Gap(40),
                         ConstrainedBox(
                           constraints: const BoxConstraints(maxWidth: 400),

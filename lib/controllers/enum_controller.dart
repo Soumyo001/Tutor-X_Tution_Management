@@ -10,7 +10,7 @@ class EnumController with ChangeNotifier {
   SessionStatus _sessionStatus = SessionStatus.closed;
   StudentMedium _studentMedium = StudentMedium.bangla;
   StudentTypes _studentTypes = StudentTypes.class_1_to_class_5;
-  SubjectTypes _subjectTypes = SubjectTypes.bangla;
+  SubjectTypes _subjectTypes = SubjectTypes.mathematics;
   TutorBackgroundCheckType _tutorBackgroundCheckType =
       TutorBackgroundCheckType.educational;
   UserCategory _userCategory = UserCategory.student;

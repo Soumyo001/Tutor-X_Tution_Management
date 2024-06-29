@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "307685857477",
+    "project_id": "tutor-x-tution-management",
+    "storage_bucket": "tutor-x-tution-management.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:307685857477:android:7a6b2f7d7170397f42f8ac",
+        "android_client_info": {
+          "package_name": "me.soumyo.tutor_x_tution_management"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-FUqF6_E0K9pvtA9Gcbu4lQt8d2QSt9Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
