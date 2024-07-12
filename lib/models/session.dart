@@ -1,9 +1,5 @@
-import 'dart:convert';
-
 import 'package:tutor_x_tution_management/data/enums.dart';
-import 'package:tutor_x_tution_management/models/payment.dart';
-import 'package:tutor_x_tution_management/models/student.dart';
-import 'package:tutor_x_tution_management/models/tutor.dart';
+
 import 'package:tutor_x_tution_management/utils/constants.dart';
 
 class Session {
@@ -14,9 +10,6 @@ class Session {
   late String endDate;
   late String duration;
   late SessionStatus sessionStatus;
-  late Student student;
-  late Tutor tutor;
-  late Payment payment;
 
   Session({
     required this.sessionId,
@@ -26,9 +19,6 @@ class Session {
     required this.endDate,
     required this.duration,
     required this.sessionStatus,
-    required this.student,
-    required this.tutor,
-    required this.payment,
   });
 
   Session.fromJson(Map<String, Object?> json) {
@@ -39,11 +29,6 @@ class Session {
     endDate = json[sessionEndDateColumn] as String;
     duration = json[sessionDurationColumn] as String;
     sessionStatus = json[sessionStatusColumn] as SessionStatus;
-    student =
-        Student.fromJson(jsonDecode(json[sessionStudentColumn] as String));
-    tutor = Tutor.fromJson(jsonDecode(json[sessionTutorColumn] as String));
-    payment =
-        Payment.fromJson(jsonDecode(json[sessionPaymentColumn] as String));
   }
 
   Map<String, Object?> toJson() => {
@@ -54,8 +39,5 @@ class Session {
         sessionEndDateColumn: endDate,
         sessionDurationColumn: duration,
         sessionStatusColumn: sessionStatus,
-        sessionStudentColumn: student.toJson(),
-        sessionTutorColumn: tutor.toJson(),
-        sessionPaymentColumn: payment.toJson(),
       };
 }

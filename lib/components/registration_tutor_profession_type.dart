@@ -16,6 +16,7 @@ class _TutorProfessionTypeState extends State<TutorProfessionType> {
   Widget build(BuildContext context) {
     final EnumController enumController = Provider.of<EnumController>(context);
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         const Text('Profession: '),
         DropdownButton<ProfessionType>(

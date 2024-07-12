@@ -2,21 +2,18 @@ import 'package:flutter/Material.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
-import 'package:tutor_x_tution_management/data/enums.dart';
-import 'package:tutor_x_tution_management/pages/setup_pages/tutor/tutor_info_page.dart';
-import 'package:tutor_x_tution_management/pages/setup_pages/tutor/tutor_info_page3.dart';
-import 'package:tutor_x_tution_management/pages/setup_pages/tutor/tutor_info_page_2.dart';
+import 'package:tutor_x_tution_management/pages/setup%20pages/tutor/tutor_info_page.dart';
+import 'package:tutor_x_tution_management/pages/setup%20pages/tutor/tutor_info_page2.dart';
+import 'package:tutor_x_tution_management/pages/setup%20pages/tutor/tutor_info_page_1.dart';
 
 class TutorSetupWalk extends StatefulWidget {
   final String fullName, phoneNumber, email, password;
-  final ProfessionType professionType;
   const TutorSetupWalk({
     super.key,
     required this.fullName,
     required this.phoneNumber,
     required this.email,
     required this.password,
-    required this.professionType,
   });
 
   @override
@@ -51,7 +48,6 @@ class _TutorSetupWalkState extends State<TutorSetupWalk> {
           phoneNumber: widget.phoneNumber,
           email: widget.email,
           password: widget.password,
-          professionType: widget.professionType,
           educationController: _educationController,
           locationController: _locationController,
           salaryController: _salaryController,
@@ -74,6 +70,7 @@ class _TutorSetupWalkState extends State<TutorSetupWalk> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               padding: const EdgeInsets.all(16),
@@ -113,7 +110,7 @@ class _TutorSetupWalkState extends State<TutorSetupWalk> {
                   ),
                   const Gap(25),
                   SizedBox(
-                    height: 320,
+                    height: 350,
                     child: PageView.builder(
                       itemCount: _buildPages().length,
                       controller: _pageController,

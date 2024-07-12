@@ -31,7 +31,23 @@ class ErrorBorders {
       color: Colors.red.shade900,
     ),
   );
+  static TextStyle? errorTextStylePasswordC = TextStyle(
+    color: Colors.red.shade900,
+  );
+  static InputBorder? errorBorderPasswordC = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(12),
+    borderSide: BorderSide(
+      color: Colors.redAccent.shade200.withOpacity(0.8),
+    ),
+  );
+  static InputBorder? errorFocusedBorderPasswordC = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(12),
+    borderSide: BorderSide(
+      color: Colors.red.shade900,
+    ),
+  );
   static String errorTextPassword = '';
+  static String errorTextPasswordC = '';
   static String errorTextEmail = '';
   static String errorTextPhoneNumber = '';
   static String errorTextFirstName = '';

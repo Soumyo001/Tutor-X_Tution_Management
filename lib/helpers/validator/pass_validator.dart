@@ -3,7 +3,7 @@ class PasswordValidator {
   static final _shared = PasswordValidator._sharedInstance();
   factory PasswordValidator() => _shared;
 
-  final RegExp passPattern = RegExp(
+  final RegExp _passPattern = RegExp(
     r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$',
     caseSensitive: false,
     multiLine: false,
@@ -13,6 +13,6 @@ class PasswordValidator {
     if (value == null || value.isEmpty) {
       return false;
     }
-    return passPattern.hasMatch(value);
+    return _passPattern.hasMatch(value);
   }
 }

@@ -1,7 +1,3 @@
-import 'dart:convert';
-
-import 'package:tutor_x_tution_management/models/student.dart';
-import 'package:tutor_x_tution_management/models/tutor.dart';
 import 'package:tutor_x_tution_management/utils/constants.dart';
 
 class Report {
@@ -10,8 +6,6 @@ class Report {
   late int tutorId;
   late String reportText;
   late String reportDate;
-  late Student student;
-  late Tutor tutor;
 
   Report({
     required this.reportId,
@@ -19,8 +13,6 @@ class Report {
     required this.tutorId,
     required this.reportText,
     required this.reportDate,
-    required this.student,
-    required this.tutor,
   });
 
   Report.fromJson(Map<String, Object?> json) {
@@ -29,8 +21,6 @@ class Report {
     tutorId = json[tutorIdColumn] as int;
     reportText = json[reportTextColumn] as String;
     reportDate = json[reportDateColumn] as String;
-    student = Student.fromJson(jsonDecode(json[reportStudentColumn] as String));
-    tutor = Tutor.fromJson(jsonDecode(json[reportTutorColumn] as String));
   }
 
   Map<String, Object?> toJson() => {
@@ -39,7 +29,5 @@ class Report {
         tutorIdColumn: tutorId,
         reportTextColumn: reportText,
         reportDateColumn: reportDate,
-        reportStudentColumn: student.toJson(),
-        reportTutorColumn: tutor.toJson(),
       };
 }

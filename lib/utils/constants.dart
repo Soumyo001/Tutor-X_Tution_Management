@@ -2,12 +2,12 @@
 const userIdColumn = 'userId';
 const fullNameColumn = 'fullName';
 const phoneNumberColumn = 'phoneNumber';
-const emailColumn = 'email';
-const passwordColumn = 'password';
-const educationColumn = 'education';
-const locationColumn = 'location';
+const userEmailColumn = 'email';
+const userPasswordColumn = 'password';
+const userEducationColumn = 'education';
+const userLocationColumn = 'location';
 const userTypeColumn = 'type';
-const resourceListColumn = 'resources';
+const userResourceListColumn = 'resources';
 
 //tutor
 const tutorIdColumn = 'tutorId';
@@ -24,15 +24,17 @@ const tutorSessionsListColumn = 'sessions';
 const requestListColumn = 'requests';
 const reportListColumn = 'reports';
 const messegeListColumn = 'messeges';
+const tutorImagePathColumn = 'imagePath';
 
 //student
 const studentIdColumn = 'studentId';
 const studentFirstNameColumn = 'firstName';
 const studentLastNameColumn = 'lastName';
-const studentMediumColumn = 'StudentMedium';
+const studentMediumColumn = 'studentMedium';
 const studentSelfDescriptionColumn = 'studentSelfDescription';
 const studentSessionColumn = 'session';
 const studentReviewListColumn = 'studentReviews';
+const studentImagePathColumn = 'imagePath';
 
 //resource
 const resourceIdColumn = 'resourceId';

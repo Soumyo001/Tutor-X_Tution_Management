@@ -1,17 +1,21 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/Material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'package:tutor_x_tution_management/components/error_borders.dart';
 import 'package:tutor_x_tution_management/components/input_box.dart';
 import 'package:tutor_x_tution_management/components/login_signup_button.dart';
 import 'package:tutor_x_tution_management/components/registration_tutor_profession_type.dart';
-import 'package:tutor_x_tution_management/controllers/enum_controller.dart';
+import 'package:tutor_x_tution_management/helpers/loading/loading_helper.dart';
 import 'package:tutor_x_tution_management/helpers/validator/email_validator.dart';
 import 'package:tutor_x_tution_management/helpers/validator/generic_validator.dart';
 import 'package:tutor_x_tution_management/helpers/validator/pass_validator.dart';
 import 'package:tutor_x_tution_management/helpers/validator/phone_number_validator.dart';
-import 'package:tutor_x_tution_management/pages/setup_pages/tutor/tutor_setup_walkthrough.dart';
+import 'package:tutor_x_tution_management/pages/setup%20pages/tutor/tutor_setup_walkthrough.dart';
+import 'package:tutor_x_tution_management/service/auth/auth_exceptions.dart';
+import 'package:tutor_x_tution_management/service/auth/auth_service.dart';
+import 'package:tutor_x_tution_management/utils/dialogs/error_dialog.dart';
 
 class TutorRegistrationForm extends StatefulWidget {
   const TutorRegistrationForm({super.key});
@@ -25,7 +29,9 @@ class _TutorRegistrationFormState extends State<TutorRegistrationForm> {
   late final TextEditingController _emailEditingController;
   late final TextEditingController _passwordEditingController;
   late final TextEditingController _phoneController;
+  late final TextEditingController _confirmPass;
   final RxBool isPasswrodVisible = false.obs;
+  RxBool isConfirmPasswrodVisible = false.obs;
 
   @override
   void initState() {
@@ -34,6 +40,7 @@ class _TutorRegistrationFormState extends State<TutorRegistrationForm> {
     _emailEditingController = TextEditingController();
     _passwordEditingController = TextEditingController();
     _phoneController = TextEditingController();
+    _confirmPass = TextEditingController();
   }
 
   void onEmailChange(String value) {
@@ -94,6 +101,35 @@ class _TutorRegistrationFormState extends State<TutorRegistrationForm> {
     }
   }
 
+  void _onConfirmPassChange(String value) {
+    if (_passwordEditingController.text != value && value.isNotEmpty) {
+      setState(
+        () {
+          ErrorBorders.errorTextPasswordC = 'Passwords doesn\'t match';
+          ErrorBorders.errorTextStylePasswordC = TextStyle(
+            color: Colors.red.shade900,
+          );
+          ErrorBorders.errorBorderPasswordC = OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(
+              color: Colors.redAccent.shade200.withOpacity(0.8),
+            ),
+          );
+          ErrorBorders.errorFocusedBorderPasswordC = OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(
+              color: Colors.red.shade900,
+            ),
+          );
+        },
+      );
+    } else {
+      setState(() {
+        ErrorBorders.errorTextPasswordC = '';
+      });
+    }
+  }
+
   void onPhoneNumberChange(String value) {
     if (!PhoneValidator().validate(value) && value.isNotEmpty) {
       setState(() {
@@ -145,35 +181,64 @@ class _TutorRegistrationFormState extends State<TutorRegistrationForm> {
     }
   }
 
+  Future<bool> _createWithEmailPassword() async {
+    LoadingHelper().show(context, 'Loading...');
+    try {
+      await AuthService.fromFirebase().createUser(
+        email: _emailEditingController.text,
+        password: _passwordEditingController.text,
+        confirmPassword: _confirmPass.text,
+        phone: _phoneController.text,
+      );
+      LoadingHelper().close();
+      final user = AuthService.fromFirebase().currentUser;
+      if (user != null) {
+        // await AuthService.fromFirebase().reload();
+        // if (!user.isEmailVerified) {
+        //   await AuthService.fromFirebase().sendEmailverification();
+        // }
+      }
+      return true;
+    } on UserNotLoggedInException catch (e) {
+      LoadingHelper().close();
+      await showErrorDialog(context, e.code);
+      return false;
+    } on GenericException catch (e) {
+      LoadingHelper().close();
+      await showErrorDialog(context, e.code);
+      return false;
+    } catch (e) {
+      LoadingHelper().close();
+      await showErrorDialog(
+          context, 'Not from own class exceptions: ${e.toString()}');
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final EnumController enumController = Provider.of<EnumController>(context);
     return Column(
       children: [
-        ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 440),
-          child: InputBox(
-            textEditingController: _fullNameController,
-            hintText: 'Full Name',
-            autoCorrect: false,
-            enableSuggestions: false,
-            obscureText: false,
-            fontSize: 14,
-            maxWidth: 600,
-            errorText: (ErrorBorders.errorTextFullName.isEmpty
-                ? null
-                : ErrorBorders.errorTextFullName),
-            errorStyle: ErrorBorders.errorTextStyle,
-            errorBorder: ErrorBorders.errorBorder,
-            focusedErrorBorder: ErrorBorders.errorFocusedBorder,
-          ),
+        InputBox(
+          textEditingController: _fullNameController,
+          hintText: 'Full Name',
+          autoCorrect: false,
+          enableSuggestions: false,
+          obscureText: false,
+          fontSize: 14,
+          errorText: (ErrorBorders.errorTextFullName.isEmpty
+              ? null
+              : ErrorBorders.errorTextFullName),
+          errorStyle: ErrorBorders.errorTextStyle,
+          errorBorder: ErrorBorders.errorBorder,
+          focusedErrorBorder: ErrorBorders.errorFocusedBorder,
         ),
         const Gap(5),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             const TutorProfessionType(),
-            const Gap(10),
             InputBox(
               textEditingController: _phoneController,
               hintText: 'Phone Number',
@@ -181,8 +246,8 @@ class _TutorRegistrationFormState extends State<TutorRegistrationForm> {
               enableSuggestions: false,
               onChanged: onPhoneNumberChange,
               obscureText: false,
-              maxWidth: 210,
-              keyboardType: TextInputType.phone,
+              maxWidth: 190,
+              keyboardType: TextInputType.number,
               errorText: (ErrorBorders.errorTextPhoneNumber.isEmpty
                   ? null
                   : ErrorBorders.errorTextPhoneNumber),
@@ -199,7 +264,6 @@ class _TutorRegistrationFormState extends State<TutorRegistrationForm> {
           autoCorrect: false,
           enableSuggestions: false,
           obscureText: false,
-          maxWidth: 440,
           keyboardType: TextInputType.emailAddress,
           onChanged: onEmailChange,
           errorText: (ErrorBorders.errorTextEmail.isEmpty
@@ -219,7 +283,6 @@ class _TutorRegistrationFormState extends State<TutorRegistrationForm> {
             keyboardType: TextInputType.visiblePassword,
             obscureText: isPasswrodVisible.value,
             fontSize: 14,
-            maxWidth: 440,
             suffixIcon: InkWell(
               onTap: () {
                 isPasswrodVisible.value = !isPasswrodVisible.value;
@@ -240,22 +303,54 @@ class _TutorRegistrationFormState extends State<TutorRegistrationForm> {
             focusedErrorBorder: ErrorBorders.errorFocusedBorderPassword,
           ),
         ),
-        const Gap(30),
+        const Gap(10),
+        Obx(
+          () => InputBox(
+            textEditingController: _confirmPass,
+            hintText: 'Confirm Password',
+            autoCorrect: false,
+            enableSuggestions: false,
+            keyboardType: TextInputType.visiblePassword,
+            obscureText: isConfirmPasswrodVisible.value,
+            fontSize: 14,
+            suffixIcon: InkWell(
+              onTap: () {
+                isConfirmPasswrodVisible.value =
+                    !isConfirmPasswrodVisible.value;
+              },
+              child: Icon(
+                isConfirmPasswrodVisible.value
+                    ? Icons.visibility_off_outlined
+                    : Icons.visibility_outlined,
+                color: Colors.black,
+              ),
+            ),
+            onChanged: _onConfirmPassChange,
+            errorText: (ErrorBorders.errorTextPasswordC.isEmpty
+                ? null
+                : ErrorBorders.errorTextPasswordC),
+            errorStyle: ErrorBorders.errorTextStylePasswordC,
+            errorBorder: ErrorBorders.errorBorderPasswordC,
+            focusedErrorBorder: ErrorBorders.errorFocusedBorderPasswordC,
+          ),
+        ),
+        const Gap(20),
         LogSignButton(
           text: 'Sign Up',
-          onTap: () {
+          onTap: () async {
             if (!finalValidatino()) {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => TutorSetupWalk(
-                    professionType: enumController.professionType,
-                    phoneNumber: _phoneController.text,
-                    fullName: _fullNameController.text,
-                    email: _emailEditingController.text,
-                    password: _passwordEditingController.text,
+              if (await _createWithEmailPassword()) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => TutorSetupWalk(
+                      phoneNumber: _phoneController.text,
+                      fullName: _fullNameController.text,
+                      email: _emailEditingController.text,
+                      password: _passwordEditingController.text,
+                    ),
                   ),
-                ),
-              );
+                );
+              }
             }
           },
         ),

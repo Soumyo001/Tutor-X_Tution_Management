@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tutor_x_tution_management/helpers/validator/validating_flags.dart';
 import 'package:tutor_x_tution_management/pages/login_page.dart';
 import 'package:tutor_x_tution_management/pages/register_page.dart';
 
@@ -15,6 +16,8 @@ class _LoginRegisterViewState extends State<LoginRegisterView> {
   void togglePage() {
     setState(() {
       isLoginPage = !isLoginPage;
+      ValidationFlags.isOnLogin = isLoginPage;
+      ValidationFlags.isOnRegister = !isLoginPage;
     });
   }
 

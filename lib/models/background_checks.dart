@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:tutor_x_tution_management/data/enums.dart';
-import 'package:tutor_x_tution_management/models/tutor.dart';
 import 'package:tutor_x_tution_management/utils/constants.dart';
 
 class BackgroundChecks {
@@ -10,7 +7,6 @@ class BackgroundChecks {
   late TutorBackgroundCheckType tutorBackgroundCheckType;
   late DateTime checkedDate;
   late VerificationStatus result;
-  late Tutor tutor;
 
   BackgroundChecks({
     required this.checkId,
@@ -18,7 +14,6 @@ class BackgroundChecks {
     required this.tutorBackgroundCheckType,
     required this.checkedDate,
     required this.result,
-    required this.tutor,
   });
 
   BackgroundChecks.fromJson(Map<String, Object?> json) {
@@ -28,8 +23,6 @@ class BackgroundChecks {
         as TutorBackgroundCheckType;
     checkedDate = json[backgroundCheckDateColumn] as DateTime;
     result = json[backgroundCheckResultColumn] as VerificationStatus;
-    tutor =
-        Tutor.fromJson(jsonDecode(json[backgroundCheckTutorColumn] as String));
   }
 
   Map<String, Object?> toJson() => {
@@ -38,6 +31,5 @@ class BackgroundChecks {
         backgroundTutorBackgroundCheckedTypeColumn: tutorBackgroundCheckType,
         backgroundCheckDateColumn: checkedDate,
         backgroundCheckResultColumn: result,
-        backgroundCheckTutorColumn: tutor.toJson(),
       };
 }

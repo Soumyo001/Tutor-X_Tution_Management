@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:tutor_x_tution_management/data/enums.dart';
-import 'package:tutor_x_tution_management/models/session.dart';
 import 'package:tutor_x_tution_management/utils/constants.dart';
 
 class Payment {
@@ -11,7 +8,6 @@ class Payment {
   late String paymentDate;
   late PaymentMethod paymentMethod;
   late PaymentStatus paymentStatus;
-  late Session session;
 
   Payment({
     required this.paymentId,
@@ -20,7 +16,6 @@ class Payment {
     required this.paymentDate,
     required this.paymentMethod,
     required this.paymentStatus,
-    required this.session,
   });
 
   Payment.fromJson(Map<String, Object?> json) {
@@ -30,8 +25,6 @@ class Payment {
     paymentDate = json[paymentDateColumn] as String;
     paymentMethod = json[paymentMethodColumn] as PaymentMethod;
     paymentStatus = json[paymentStatusColumn] as PaymentStatus;
-    session =
-        Session.fromJson(jsonDecode(json[paymentSessionColumn] as String));
   }
 
   Map<String, Object?> toJson() => {
@@ -41,6 +34,5 @@ class Payment {
         paymentDateColumn: paymentDate,
         paymentMethodColumn: paymentMethod,
         paymentStatusColumn: paymentStatus,
-        paymentSessionColumn: session.toJson(),
       };
 }

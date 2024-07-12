@@ -1,20 +1,15 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tutor_x_tution_management/pages/home_page.dart';
+import 'package:tutor_x_tution_management/pages/main_pages/home_page.dart';
 import 'package:tutor_x_tution_management/pages/login_register_view.dart';
+import 'package:tutor_x_tution_management/service/auth/auth_service.dart';
 
-class Auth extends StatefulWidget {
+class Auth extends StatelessWidget {
   const Auth({super.key});
 
   @override
-  State<Auth> createState() => _AuthState();
-}
-
-class _AuthState extends State<Auth> {
-  @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: FirebaseAuth.instance.userChanges(),
+      stream: AuthService.fromFirebase().onUserChanges(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return const HomePage();

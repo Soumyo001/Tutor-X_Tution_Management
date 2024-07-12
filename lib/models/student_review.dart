@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:tutor_x_tution_management/models/student.dart';
 import 'package:tutor_x_tution_management/utils/constants.dart';
 
 class StudentReview {
@@ -10,7 +7,6 @@ class StudentReview {
   late int rating;
   late String reviewText;
   late String reviewDate;
-  late Student student;
 
   StudentReview({
     required this.studentReviewId,
@@ -19,7 +15,6 @@ class StudentReview {
     required this.rating,
     required this.reviewText,
     required this.reviewDate,
-    required this.student,
   });
 
   StudentReview.fromJson(Map<String, Object?> json) {
@@ -29,8 +24,6 @@ class StudentReview {
     rating = json[studentReviewRatingColumn] as int;
     reviewText = json[studentReviewTextColumn] as String;
     reviewDate = json[studentReviewDateColumn] as String;
-    student = Student.fromJson(
-        jsonDecode(json[studentReviewStudentColumn] as String));
   }
 
   Map<String, Object?> toJson() => {
@@ -40,6 +33,5 @@ class StudentReview {
         studentReviewRatingColumn: rating,
         studentReviewTextColumn: reviewText,
         studentReviewDateColumn: reviewDate,
-        studentReviewStudentColumn: student.toJson(),
       };
 }

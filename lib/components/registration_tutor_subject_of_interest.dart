@@ -19,6 +19,7 @@ class _RegistrationSubjectOfInterestState
   Widget build(BuildContext context) {
     final EnumController enumController = Provider.of<EnumController>(context);
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Container(
           padding: const EdgeInsets.all(16),

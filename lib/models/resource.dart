@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:tutor_x_tution_management/models/user.dart';
 import 'package:tutor_x_tution_management/utils/constants.dart';
 
 class Resource {
@@ -10,7 +7,6 @@ class Resource {
   late String resourceDescription;
   late String resourceUrl;
   late String resourceUploadDate;
-  late User user;
 
   Resource({
     required this.resourceId,
@@ -19,7 +15,6 @@ class Resource {
     required this.resourceDescription,
     required this.resourceUrl,
     required this.resourceUploadDate,
-    required this.user,
   });
 
   Resource.fromJson(Map<String, Object?> json) {
@@ -29,7 +24,6 @@ class Resource {
     resourceDescription = json[resourceDescriptionColumn] as String;
     resourceUrl = json[resourceUrlColumn] as String;
     resourceUploadDate = json[resourceUploadDateColumn] as String;
-    user = User.fromJson(jsonDecode(json[resourceUserColumn] as String));
   }
 
   Map<String, Object?> toJson() => {
@@ -39,6 +33,5 @@ class Resource {
         resourceDescriptionColumn: resourceDescription,
         resourceUrlColumn: resourceUrl,
         resourceUploadDateColumn: resourceUploadDate,
-        resourceUserColumn: user.toJson(),
       };
 }

@@ -1,5 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,10 @@ import 'package:tutor_x_tution_management/color_pallete.dart';
 import 'package:tutor_x_tution_management/components/input_box.dart';
 import 'package:tutor_x_tution_management/components/login_signup_button.dart';
 import 'package:tutor_x_tution_management/components/social_button.dart';
+import 'package:tutor_x_tution_management/helpers/loading/loading_helper.dart';
+import 'package:tutor_x_tution_management/service/auth/auth_exceptions.dart';
+import 'package:tutor_x_tution_management/service/auth/auth_service.dart';
+import 'package:tutor_x_tution_management/utils/dialogs/error_dialog.dart';
 
 class LoginPage extends StatefulWidget {
   final void Function() togglePage;
@@ -32,9 +37,34 @@ class _LoginPageState extends State<LoginPage> {
     _passwordEditingController = TextEditingController();
   }
 
+  void _loginWithEmailPassword() async {
+    LoadingHelper().show(context, 'Loading...');
+    try {
+      if (_emailEditingController.text.isEmpty &&
+          _passwordEditingController.text.isEmpty) {
+        throw const GenericException(code: 'One or more field is required');
+      }
+      await AuthService.fromFirebase().logIn(
+          email: _emailEditingController.text,
+          password: _passwordEditingController.text);
+
+      LoadingHelper().close();
+    } on UserNotLoggedInException catch (e) {
+      LoadingHelper().close();
+      await showErrorDialog(context, e.code);
+    } on GenericException catch (e) {
+      LoadingHelper().close();
+      await showErrorDialog(context, e.code);
+    } catch (e) {
+      LoadingHelper().close();
+      await showErrorDialog(
+          context, 'Not from own class exceptions: ${e.toString()}');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final currentWidth = MediaQuery.of(context).size.width;
+    final currentSize = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Center(
         child: Stack(
@@ -55,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: SizedBox(
-                    width: currentWidth / 2,
+                    width: currentSize / 2,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -86,153 +116,150 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    width: currentWidth / 2,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade300,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Lottie.network(
-                          'https://lottie.host/ac73cae1-5b19-42d2-a346-8206be8f61c5/pv8i2EcrQo.json',
-                          width: 200,
-                          height: 150,
-                        ),
-                        const Text(
-                          'User Login',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 25,
-                            fontWeight: FontWeight.w300,
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Lottie.network(
+                            'https://lottie.host/ac73cae1-5b19-42d2-a346-8206be8f61c5/pv8i2EcrQo.json',
+                            width: 200,
+                            height: 150,
                           ),
-                        ),
-                        const Gap(30),
-                        InputBox(
-                          textEditingController: _emailEditingController,
-                          hintText: 'E-mail',
-                          autoCorrect: false,
-                          enableSuggestions: false,
-                          obscureText: false,
-                        ),
-                        const Gap(20),
-                        Obx(
-                          () => InputBox(
-                            textEditingController: _passwordEditingController,
-                            hintText: 'Password',
+                          const Text(
+                            'User Login',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 25,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                          const Gap(30),
+                          InputBox(
+                            textEditingController: _emailEditingController,
+                            hintText: 'E-mail',
                             autoCorrect: false,
                             enableSuggestions: false,
-                            obscureText: isPasswrodVisible.value ? false : true,
-                            suffixIcon: InkWell(
-                              onTap: () {
-                                isPasswrodVisible.value =
-                                    !isPasswrodVisible.value;
-                              },
-                              child: Icon(
-                                isPasswrodVisible.value
-                                    ? Icons.visibility_off_outlined
-                                    : Icons.visibility_outlined,
-                                color: Colors.black,
+                            obscureText: false,
+                          ),
+                          const Gap(20),
+                          Obx(
+                            () => InputBox(
+                              textEditingController: _passwordEditingController,
+                              hintText: 'Password',
+                              autoCorrect: false,
+                              enableSuggestions: false,
+                              obscureText:
+                                  isPasswrodVisible.value ? false : true,
+                              suffixIcon: InkWell(
+                                onTap: () {
+                                  isPasswrodVisible.value =
+                                      !isPasswrodVisible.value;
+                                },
+                                child: Icon(
+                                  isPasswrodVisible.value
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility_outlined,
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        const Gap(10),
-                        ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 400),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              GestureDetector(
-                                onTap: () {},
-                                child: const Text(
-                                  'Forgot Password?',
+                          const Gap(10),
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 400),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {},
+                                  child: const Text(
+                                    'Forgot Password?',
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        const Gap(30),
-                        LogSignButton(
-                          text: 'Sign In',
-                          onTap: () async {
-                            await FirebaseAuth.instance
-                                .signInWithEmailAndPassword(
-                              email: _emailEditingController.text,
-                              password: _passwordEditingController.text,
-                            );
-                          },
-                        ),
-                        const Gap(40),
-                        ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 400),
-                          child: Row(
+                          const Gap(30),
+                          LogSignButton(
+                            text: 'Sign In',
+                            onTap: _loginWithEmailPassword,
+                          ),
+                          const Gap(40),
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 400),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Divider(
+                                    thickness: 0.5,
+                                    color: Colors.grey.shade500,
+                                  ),
+                                ),
+                                const Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: Text(
+                                    'Or continue with',
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Divider(
+                                    thickness: 0.5,
+                                    color: Colors.grey.shade500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Gap(30),
+                          SocialButton(
+                            iconPath: 'lib/assets/icons/google.svg',
+                            socialText: 'Sign in with Google',
+                            onPressed: () {},
+                            horizontalPadding: 90,
+                          ),
+                          const Gap(12),
+                          SocialButton(
+                            iconPath: 'lib/assets/icons/facebook.svg',
+                            socialText: 'Sign in with Facebook',
+                            horizontalPadding: 80,
+                            onPressed: () {},
+                          ),
+                          const Gap(40),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Expanded(
-                                child: Divider(
-                                  thickness: 0.5,
+                              Text(
+                                'Don\'t have an account?',
+                                style: TextStyle(
                                   color: Colors.grey.shade500,
                                 ),
                               ),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Text(
-                                  'Or continue with',
+                              const Gap(5),
+                              GestureDetector(
+                                onTap: widget.togglePage,
+                                child: const Text(
+                                  'Register here',
                                   style: TextStyle(
-                                    color: Colors.grey,
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
-                              Expanded(
-                                child: Divider(
-                                  thickness: 0.5,
-                                  color: Colors.grey.shade500,
-                                ),
-                              ),
                             ],
                           ),
-                        ),
-                        const Gap(30),
-                        SocialButton(
-                          iconPath: 'lib/assets/icons/google.svg',
-                          socialText: 'Sign in with Google',
-                          onPressed: () {},
-                          horizontalPadding: 90,
-                        ),
-                        const Gap(12),
-                        SocialButton(
-                          iconPath: 'lib/assets/icons/facebook.svg',
-                          socialText: 'Sign in with Facebook',
-                          horizontalPadding: 80,
-                          onPressed: () {},
-                        ),
-                        const Gap(40),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Don\'t have an account?',
-                              style: TextStyle(
-                                color: Colors.grey.shade500,
-                              ),
-                            ),
-                            const Gap(5),
-                            GestureDetector(
-                              onTap: widget.togglePage,
-                              child: const Text(
-                                'Register here',
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

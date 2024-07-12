@@ -1,0 +1,153 @@
+import 'dart:convert';
+
+import 'package:tutor_x_tution_management/models/student.dart';
+import 'package:tutor_x_tution_management/service/api/api_exceptions.dart';
+import 'package:tutor_x_tution_management/utils/api_constants.dart';
+import 'package:http/http.dart' as http;
+import 'package:tutor_x_tution_management/utils/constants.dart';
+import 'dart:developer' as dev;
+
+class StudentApi {
+  StudentApi._sharedInstance();
+  static final _shared = StudentApi._sharedInstance();
+  factory StudentApi() => _shared;
+
+  Future<List<Student>> getAllStudent() async {
+    List<Student> students = [];
+    final uri = Uri.parse("$baseUrl/$studentRoute");
+    dev.log('reached ${uri.toString()}');
+    try {
+      final response = await http.get(
+        uri,
+        headers: headers,
+      );
+      if (response.statusCode >= 200 && response.statusCode <= 299) {
+        final List<dynamic> jsonData = json.decode(response.body);
+        students = jsonData.map((e) => Student.fromJson(e)).toList();
+      }
+    } on http.ClientException {
+      throw ApiClientException();
+    } catch (e) {
+      dev.log('this problem ${e.toString()}');
+      throw ApiGenericException(code: e.toString());
+    }
+    return students;
+  }
+
+  Future<Student?> getStudentById(int studentId) async {
+    late Student? student;
+    final uri = Uri.parse("$baseUrl/$studentRoute/$studentId");
+    try {
+      final response = await http.get(
+        uri,
+        headers: headers,
+      );
+      if (response.statusCode >= 200 && response.statusCode <= 299) {
+        final Map<String, dynamic> jsonData = json.decode(response.body);
+        student = Student.fromJson(jsonData);
+      }
+    } on http.ClientException {
+      throw ApiClientException();
+    } catch (e) {
+      throw ApiGenericException(code: e.toString());
+    }
+    return student;
+  }
+
+  Future<List<Student>> getStudentByUserId(int userId) async {
+    List<Student> students = [];
+    final uri = Uri.parse("$baseUrl/$studentRoute?$userIdColumn=$userId");
+    try {
+      final response = await http.get(
+        uri,
+        headers: headers,
+      );
+      if (response.statusCode >= 200 && response.statusCode <= 299) {
+        final List<dynamic> jsonData = json.decode(response.body);
+        students = jsonData.map((e) => Student.fromJson(e)).toList();
+      }
+    } on http.ClientException {
+      throw ApiClientException();
+    } catch (e) {
+      dev.log(e.toString());
+      throw ApiGenericException(code: e.toString());
+    }
+    return students;
+  }
+
+  Future<http.Response> postStudent({
+    Map<String, dynamic> requestBody = const {},
+  }) async {
+    final uri = Uri.parse("$baseUrl/$studentRoute");
+    try {
+      final response = await http.post(
+        uri,
+        headers: headers,
+        body: json.encode(requestBody),
+      );
+      return response;
+    } catch (e) {
+      final responseBody = {
+        "error": {"message": e.toString(), "code": 404}
+      };
+      final response = http.Response(
+        jsonEncode(responseBody),
+        500,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+      return response;
+    }
+  }
+
+  Future<http.Response> updateStudent({
+    required int studentId,
+    Map<String, dynamic> body = const {},
+  }) async {
+    final uri = Uri.parse("$baseUrl/$studentRoute/$studentId");
+    try {
+      final response = await http.put(
+        uri,
+        headers: headers,
+        body: json.encode(body),
+      );
+      return response;
+    } catch (e) {
+      final responseBody = {
+        "error": {"message": e.toString(), "code": 404}
+      };
+      final response = http.Response(
+        jsonEncode(responseBody),
+        500,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+      return response;
+    }
+  }
+
+  Future<http.Response> deleteStudent(int studentId) async {
+    final uri = Uri.parse("$baseUrl/$studentRoute/$studentId");
+    try {
+      final response = await http.delete(
+        uri,
+        headers: headers,
+      );
+      return response;
+    } catch (e) {
+      final responseBody = {
+        "error": {"message": e.toString(), "code": 404}
+      };
+      final response = http.Response(
+        jsonEncode(responseBody),
+        500,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+      return response;
+    }
+  }
+}

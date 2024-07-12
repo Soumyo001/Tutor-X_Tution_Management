@@ -1,13 +1,20 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:tutor_x_tution_management/components/error_borders.dart';
 import 'package:tutor_x_tution_management/components/input_box.dart';
 import 'package:tutor_x_tution_management/components/login_signup_button.dart';
+import 'package:tutor_x_tution_management/helpers/loading/loading_helper.dart';
 import 'package:tutor_x_tution_management/helpers/validator/email_validator.dart';
 import 'package:tutor_x_tution_management/helpers/validator/generic_validator.dart';
 import 'package:tutor_x_tution_management/helpers/validator/pass_validator.dart';
 import 'package:tutor_x_tution_management/helpers/validator/phone_number_validator.dart';
+import 'package:tutor_x_tution_management/pages/setup%20pages/student/student_setup_walkthrough.dart';
+import 'package:tutor_x_tution_management/service/auth/auth_exceptions.dart';
+import 'package:tutor_x_tution_management/service/auth/auth_service.dart';
+import 'package:tutor_x_tution_management/utils/dialogs/error_dialog.dart';
 
 class StudentRegistrationForm extends StatefulWidget {
   const StudentRegistrationForm({super.key});
@@ -23,9 +30,11 @@ class _StudentRegistrationFormState extends State<StudentRegistrationForm> {
   late final TextEditingController _emailEditingController;
   late final TextEditingController _passwordEditingController;
   late final TextEditingController _phoneController;
+  late final TextEditingController _confirmPass;
   RxBool isPasswrodVisible = false.obs;
+  RxBool isConfirmPasswrodVisible = false.obs;
 
-  void onEmailChange(String value) {
+  void _onEmailChange(String value) {
     if (!EmailValidator().validateEmail(value) && value.isNotEmpty) {
       setState(() {
         ErrorBorders.errorTextEmail = 'Invalid Email';
@@ -37,7 +46,7 @@ class _StudentRegistrationFormState extends State<StudentRegistrationForm> {
     }
   }
 
-  void onPasswordChange(String value) {
+  void _onPasswordChange(String value) {
     if (value.isEmpty) {
       setState(() {
         ErrorBorders.errorTextPassword = '';
@@ -83,7 +92,36 @@ class _StudentRegistrationFormState extends State<StudentRegistrationForm> {
     }
   }
 
-  void onPhoneNumberChange(String value) {
+  void _onConfirmPassChange(String value) {
+    if (_passwordEditingController.text != value && value.isNotEmpty) {
+      setState(
+        () {
+          ErrorBorders.errorTextPasswordC = 'Passwords doesn\'t match';
+          ErrorBorders.errorTextStylePasswordC = TextStyle(
+            color: Colors.red.shade900,
+          );
+          ErrorBorders.errorBorderPasswordC = OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(
+              color: Colors.redAccent.shade200.withOpacity(0.8),
+            ),
+          );
+          ErrorBorders.errorFocusedBorderPasswordC = OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(
+              color: Colors.red.shade900,
+            ),
+          );
+        },
+      );
+    } else {
+      setState(() {
+        ErrorBorders.errorTextPasswordC = '';
+      });
+    }
+  }
+
+  void _onPhoneNumberChange(String value) {
     if (!PhoneValidator().validate(value) && value.isNotEmpty) {
       setState(() {
         ErrorBorders.errorTextPhoneNumber = 'Invalid Number';
@@ -146,6 +184,42 @@ class _StudentRegistrationFormState extends State<StudentRegistrationForm> {
     _emailEditingController = TextEditingController();
     _passwordEditingController = TextEditingController();
     _phoneController = TextEditingController();
+    _confirmPass = TextEditingController();
+  }
+
+  Future<bool> _createWithEmailPassword() async {
+    LoadingHelper().show(context, 'Loading...');
+    try {
+      await AuthService.fromFirebase().createUser(
+        email: _emailEditingController.text,
+        password: _passwordEditingController.text,
+        confirmPassword: _confirmPass.text,
+        phone: _phoneController.text,
+      );
+      LoadingHelper().close();
+      final user = AuthService.fromFirebase().currentUser;
+      if (user != null) {
+        // await AuthService.fromFirebase().reload();
+        // if (!user.isEmailVerified) {
+        //   await AuthService.fromFirebase().sendEmailverification();
+        // }
+      }
+      return true;
+    } on UserNotLoggedInException catch (e) {
+      LoadingHelper().close();
+      await showErrorDialog(context, e.code);
+      return false;
+    } on GenericException catch (e) {
+      LoadingHelper().close();
+      await showErrorDialog(context, e.code);
+      return false;
+    } catch (e) {
+      LoadingHelper().close();
+      await showErrorDialog(
+          context, 'Not from own class exceptions: ${e.toString()}');
+
+      return false;
+    }
   }
 
   @override
@@ -163,8 +237,7 @@ class _StudentRegistrationFormState extends State<StudentRegistrationForm> {
                 autoCorrect: false,
                 enableSuggestions: false,
                 obscureText: false,
-                fontSize: 14,
-                maxWidth: 180,
+                maxWidth: 180, // currentSize.width / 2 / 5.311,
                 errorText: (ErrorBorders.errorTextFirstName.isEmpty
                     ? null
                     : ErrorBorders.errorTextFirstName),
@@ -179,8 +252,7 @@ class _StudentRegistrationFormState extends State<StudentRegistrationForm> {
                 autoCorrect: false,
                 enableSuggestions: false,
                 obscureText: false,
-                fontSize: 14,
-                maxWidth: 180,
+                maxWidth: 180, //currentSize.width / 2 / 5.311
                 errorText: (ErrorBorders.errorTextLastName.isEmpty
                     ? null
                     : ErrorBorders.errorTextLastName),
@@ -199,7 +271,7 @@ class _StudentRegistrationFormState extends State<StudentRegistrationForm> {
           enableSuggestions: false,
           obscureText: false,
           keyboardType: TextInputType.emailAddress,
-          onChanged: onEmailChange,
+          onChanged: _onEmailChange,
           errorText: (ErrorBorders.errorTextEmail.isEmpty
               ? null
               : ErrorBorders.errorTextEmail),
@@ -212,7 +284,7 @@ class _StudentRegistrationFormState extends State<StudentRegistrationForm> {
           textEditingController: _phoneController,
           hintText: 'Phone Number',
           autoCorrect: false,
-          onChanged: onPhoneNumberChange,
+          onChanged: _onPhoneNumberChange,
           enableSuggestions: false,
           obscureText: false,
           keyboardType: TextInputType.phone,
@@ -244,7 +316,7 @@ class _StudentRegistrationFormState extends State<StudentRegistrationForm> {
                 color: Colors.black,
               ),
             ),
-            onChanged: onPasswordChange,
+            onChanged: _onPasswordChange,
             errorText: (ErrorBorders.errorTextPassword.isEmpty
                 ? null
                 : ErrorBorders.errorTextPassword),
@@ -253,11 +325,56 @@ class _StudentRegistrationFormState extends State<StudentRegistrationForm> {
             focusedErrorBorder: ErrorBorders.errorFocusedBorderPassword,
           ),
         ),
-        const Gap(30),
+        const Gap(10),
+        Obx(
+          () => InputBox(
+            textEditingController: _confirmPass,
+            hintText: 'Confirm Password',
+            autoCorrect: false,
+            enableSuggestions: false,
+            keyboardType: TextInputType.visiblePassword,
+            obscureText: isConfirmPasswrodVisible.value,
+            fontSize: 14,
+            suffixIcon: InkWell(
+              onTap: () {
+                isConfirmPasswrodVisible.value =
+                    !isConfirmPasswrodVisible.value;
+              },
+              child: Icon(
+                isConfirmPasswrodVisible.value
+                    ? Icons.visibility_off_outlined
+                    : Icons.visibility_outlined,
+                color: Colors.black,
+              ),
+            ),
+            onChanged: _onConfirmPassChange,
+            errorText: (ErrorBorders.errorTextPasswordC.isEmpty
+                ? null
+                : ErrorBorders.errorTextPasswordC),
+            errorStyle: ErrorBorders.errorTextStylePasswordC,
+            errorBorder: ErrorBorders.errorBorderPasswordC,
+            focusedErrorBorder: ErrorBorders.errorFocusedBorderPasswordC,
+          ),
+        ),
+        const Gap(20),
         LogSignButton(
           text: 'Sign Up',
-          onTap: () {
-            if (!finalValidation()) {}
+          onTap: () async {
+            if (!finalValidation()) {
+              if (await _createWithEmailPassword()) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => StudentWalk(
+                      firstName: _firstNameController.text,
+                      lastName: _lastNameController.text,
+                      email: _emailEditingController.text,
+                      password: _passwordEditingController.text,
+                      phoneNumber: _phoneController.text,
+                    ),
+                  ),
+                );
+              }
+            }
           },
         ),
       ],

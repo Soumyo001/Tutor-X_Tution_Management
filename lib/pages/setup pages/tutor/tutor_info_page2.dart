@@ -1,15 +1,23 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:convert';
+
 import 'package:flutter/Material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:tutor_x_tution_management/components/input_box.dart';
 import 'package:tutor_x_tution_management/controllers/enum_controller.dart';
-import 'package:tutor_x_tution_management/data/enums.dart';
-import 'dart:developer' as dev;
+import 'package:tutor_x_tution_management/helpers/validator/validating_flags.dart';
+import 'package:tutor_x_tution_management/models/tutor.dart';
+import 'package:tutor_x_tution_management/models/user.dart';
+import 'package:tutor_x_tution_management/service/api/tutor_api.dart';
+import 'package:tutor_x_tution_management/service/api/user_api.dart';
+import 'package:tutor_x_tution_management/utils/constants.dart';
+import 'package:tutor_x_tution_management/utils/dialogs/error_dialog2.dart';
 
 class TutorInfo2 extends StatefulWidget {
   final void Function(int) change;
   final String fullName, phoneNumber, email, password;
-  final ProfessionType professionType;
   final TextEditingController educationController;
   final TextEditingController locationController;
   final TextEditingController salaryController;
@@ -20,7 +28,6 @@ class TutorInfo2 extends StatefulWidget {
     required this.phoneNumber,
     required this.email,
     required this.password,
-    required this.professionType,
     required this.educationController,
     required this.locationController,
     required this.salaryController,
@@ -41,7 +48,7 @@ class _TutorInfo2State extends State<TutorInfo2> {
 
   @override
   Widget build(BuildContext context) {
-    EnumController e = Provider.of<EnumController>(context);
+    final e = Provider.of<EnumController>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -83,21 +90,53 @@ class _TutorInfo2State extends State<TutorInfo2> {
                 ),
               ),
               TextButton.icon(
-                onPressed: () {
-                  dev.log(widget.email);
-                  dev.log(widget.fullName);
-                  dev.log(widget.password);
-                  dev.log(widget.phoneNumber);
-                  dev.log(widget.email);
-                  dev.log(e.availabilityStatus.toString());
-                  dev.log(e.professionType.toString());
-                  dev.log(e.studentMedium.toString());
-                  dev.log(e.subjectTypes.toString());
-                  dev.log(e.studentTypes.toString());
-                  dev.log(e.userCategory.toString());
-                  dev.log(widget.educationController.text);
-                  dev.log(widget.locationController.text);
-                  dev.log(widget.salaryController.text);
+                onPressed: () async {
+                  final user = User(
+                    userId: 0,
+                    fullName: widget.fullName,
+                    phoneNumber: widget.phoneNumber,
+                    email: widget.email,
+                    password: widget.password,
+                    education: widget.educationController.text,
+                    location: widget.locationController.text,
+                    userType: e.userCategory,
+                  );
+                  final responseUser =
+                      await UserApi().postUser(requestBody: user.toJson());
+                  if (responseUser.statusCode >= 200 &&
+                      responseUser.statusCode <= 299) {
+                    ValidationFlags.isUserInfoOk = true;
+                    final body = jsonDecode(responseUser.body);
+                    final userId = body[userIdColumn];
+                    final tutor = Tutor(
+                      tutorId: 0,
+                      userId: userId,
+                      status: e.availabilityStatus,
+                      mediumOfInterest: e.studentMedium,
+                      expectedStudent: e.studentTypes,
+                      subjectOfInterest: e.subjectTypes,
+                      expectedSalary: int.parse(widget.salaryController.text),
+                      profession: e.professionType,
+                      verificationStatus: e.verificationStatus,
+                      tutorSelfDescription: _desc.text,
+                      imageData: null,
+                    );
+                    final responseTutor =
+                        await TutorApi().postTutor(requestBody: tutor.toJson());
+                    ValidationFlags.isTutorInfoOk =
+                        (responseTutor.statusCode >= 200 &&
+                                responseTutor.statusCode <= 299
+                            ? true
+                            : false);
+                  } else {
+                    ValidationFlags.isUserInfoOk = false;
+                  }
+                  if (!ValidationFlags.isUserInfoOk ||
+                      !ValidationFlags.isTutorInfoOk) {
+                    await showErrorDialog2(
+                        context, 'Please go back and Sign in again');
+                  }
+                  Navigator.of(context).pop();
                 },
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.all(24),

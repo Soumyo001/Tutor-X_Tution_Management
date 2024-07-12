@@ -1,11 +1,4 @@
-import 'dart:convert';
-
 import 'package:tutor_x_tution_management/data/enums.dart';
-import 'package:tutor_x_tution_management/models/background_checks.dart';
-import 'package:tutor_x_tution_management/models/messege.dart';
-import 'package:tutor_x_tution_management/models/report.dart';
-import 'package:tutor_x_tution_management/models/request.dart';
-import 'package:tutor_x_tution_management/models/session.dart';
 import 'package:tutor_x_tution_management/utils/constants.dart';
 
 class Tutor {
@@ -19,11 +12,7 @@ class Tutor {
   late ProfessionType profession;
   late VerificationStatus verificationStatus;
   late String tutorSelfDescription;
-  late BackgroundChecks backgroundChecks;
-  late List<Session>? sessions;
-  late List<Request>? requests;
-  late List<Report>? reports;
-  late List<Messege>? messeges;
+  late String? imageData;
 
   Tutor({
     required this.tutorId,
@@ -36,76 +25,49 @@ class Tutor {
     required this.profession,
     required this.verificationStatus,
     required this.tutorSelfDescription,
-    required this.backgroundChecks,
-    this.sessions,
-    this.requests,
-    this.reports,
-    this.messeges,
+    required this.imageData,
   });
 
   Tutor.fromJson(Map<String, Object?> json) {
     tutorId = json[tutorIdColumn] as int;
     userId = json[userIdColumn] as int;
-    status = json[tutorAvailabilityStatusColumn] as AvailabilityStatus;
-    mediumOfInterest = json[tutorMediumOfInterestColumn] as StudentMedium;
-    expectedStudent = json[tutorExpectedStudentColumn] as StudentTypes;
-    subjectOfInterest = json[tutorSubjectOfInterestColumn] as SubjectTypes;
+    status =
+        AvailabilityStatus.values[json[tutorAvailabilityStatusColumn] as int];
+    mediumOfInterest =
+        StudentMedium.values[json[tutorMediumOfInterestColumn] as int];
+    expectedStudent =
+        StudentTypes.values[json[tutorExpectedStudentColumn] as int];
+    subjectOfInterest =
+        SubjectTypes.values[json[tutorSubjectOfInterestColumn] as int];
     expectedSalary = json[tutorExpectedSalaryColumn] as int;
-    profession = json[tutorProfessionColumn] as ProfessionType;
-    verificationStatus = json[tutorVerificationColumn] as VerificationStatus;
+    profession = ProfessionType.values[json[tutorProfessionColumn] as int];
+    verificationStatus =
+        VerificationStatus.values[json[tutorVerificationColumn] as int];
     tutorSelfDescription = json[tutorSelfDescriptionColumn] as String;
-    backgroundChecks = BackgroundChecks.fromJson(
-        jsonDecode(json[tutorBackgroundCheckColumn] as String));
-    if ((json[tutorSessionsListColumn] as String).isNotEmpty) {
-      sessions = [];
-      final List<dynamic> sessionList =
-          jsonDecode(json[tutorSessionsListColumn] as String);
-      for (final session in sessionList) {
-        sessions!.add(Session.fromJson(session));
-      }
-    }
-    if ((json[requestListColumn] as String).isNotEmpty) {
-      requests = [];
-      final List<dynamic> requestList =
-          jsonDecode(json[requestListColumn] as String);
-      for (final request in requestList) {
-        requests!.add(Request.fromJson(request));
-      }
-    }
-    if ((json[reportListColumn] as String).isNotEmpty) {
-      reports = [];
-      final List<dynamic> reportList =
-          jsonDecode(json[reportListColumn] as String);
-      for (final report in reportList) {
-        reports!.add(Report.fromJson(report));
-      }
-    }
-    if ((json[messegeListColumn] as String).isNotEmpty) {
-      messeges = [];
-      final List<dynamic> messegeList =
-          jsonDecode(json[messegeListColumn] as String);
-      for (final messege in messegeList) {
-        messeges!.add(Messege.fromJson(messege));
-      }
-    }
+    imageData = json[tutorImagePathColumn] as String?;
   }
 
   Map<String, Object?> toJson() => {
         tutorIdColumn: tutorId,
         userIdColumn: userId,
-        tutorAvailabilityStatusColumn: status,
-        tutorMediumOfInterestColumn: mediumOfInterest,
-        tutorExpectedStudentColumn: expectedStudent,
-        tutorSubjectOfInterestColumn: subjectOfInterest,
+        tutorAvailabilityStatusColumn: status.index,
+        tutorMediumOfInterestColumn: mediumOfInterest.index,
+        tutorExpectedStudentColumn: expectedStudent.index,
+        tutorSubjectOfInterestColumn: subjectOfInterest.index,
         tutorExpectedSalaryColumn: expectedSalary,
-        tutorProfessionColumn: profession,
-        tutorVerificationColumn: verificationStatus,
+        tutorProfessionColumn: profession.index,
+        tutorVerificationColumn: verificationStatus.index,
         tutorSelfDescriptionColumn: tutorSelfDescription,
-        tutorBackgroundCheckColumn: backgroundChecks.toJson(),
-        tutorSessionsListColumn:
-            List<dynamic>.from(sessions!.map((e) => e.toJson())),
-        requestListColumn: List<dynamic>.from(requests!.map((e) => e.toJson())),
-        reportListColumn: List<dynamic>.from(reports!.map((e) => e.toJson())),
-        messegeListColumn: List<dynamic>.from(messeges!.map((e) => e.toJson())),
+        tutorImagePathColumn: imageData,
       };
+
+  @override
+  bool operator ==(covariant Tutor other) => tutorId == other.tutorId;
+
+  @override
+  String toString() =>
+      'tutor_id = $tutorId, user_id = $userId, status = $status, medium of interest = $mediumOfInterest, expected student = $expectedStudent, expected salary= $expectedSalary, subject of interest = $subjectOfInterest, profession = $profession, verification status = $verificationStatus, self description = $tutorSelfDescription';
+
+  @override
+  int get hashCode => tutorId.hashCode;
 }
