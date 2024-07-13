@@ -1,21 +1,23 @@
 import 'dart:convert';
 
-import 'package:tutor_x_tution_management/models/tutor.dart';
+import 'package:http/http.dart' as http;
+import 'package:tutor_x_tution_management/models/student_post.dart';
 import 'package:tutor_x_tution_management/service/api/api_exceptions.dart';
 import 'package:tutor_x_tution_management/utils/api_constants.dart';
-import 'package:http/http.dart' as http;
-import 'package:tutor_x_tution_management/utils/constants.dart';
+
 import 'dart:developer' as dev;
 
-class TutorApi {
-  TutorApi._sharedInstance();
-  static final _shared = TutorApi._sharedInstance();
-  factory TutorApi() => _shared;
+import 'package:tutor_x_tution_management/utils/constants.dart';
 
-  Future<List<Tutor>> getAllTutor() async {
-    List<Tutor> tutors = [];
-    final uri = Uri.parse("$baseUrl/$tutorRoute");
-    dev.log(uri.toString());
+class StudentPostApi {
+  StudentPostApi._sharedInstance();
+  static final _shared = StudentPostApi._sharedInstance();
+  factory StudentPostApi() => _shared;
+
+  Future<List<StudentPost>> getAllStudentPosts() async {
+    List<StudentPost> studentPosts = [];
+    final uri = Uri.parse("$baseUrl/$studentPostRoute");
+    dev.log('reached ${uri.toString()}');
     try {
       final response = await http.get(
         uri,
@@ -23,20 +25,20 @@ class TutorApi {
       );
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         final List<dynamic> jsonData = json.decode(response.body);
-        tutors = jsonData.map((e) => Tutor.fromJson(e)).toList();
+        studentPosts = jsonData.map((e) => StudentPost.fromJson(e)).toList();
       }
     } on http.ClientException {
       throw ApiClientException();
     } catch (e) {
-      dev.log('this problem from get all tutor ${e.toString()}');
+      dev.log('this problem from student post ${e.toString()}');
       throw ApiGenericException(code: e.toString());
     }
-    return tutors;
+    return studentPosts;
   }
 
-  Future<Tutor?> getTutorById(int tutorId) async {
-    late Tutor? tutor;
-    final uri = Uri.parse("$baseUrl/$tutorRoute/$tutorId");
+  Future<StudentPost?> getStudentPostById(int studentPostId) async {
+    late StudentPost? studentPost;
+    final uri = Uri.parse("$baseUrl/$studentPostRoute/$studentPostId");
     try {
       final response = await http.get(
         uri,
@@ -44,21 +46,44 @@ class TutorApi {
       );
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         final Map<String, dynamic> jsonData = json.decode(response.body);
-        tutor = Tutor.fromJson(jsonData);
+        studentPost = StudentPost.fromJson(jsonData);
       }
     } on http.ClientException {
       throw ApiClientException();
     } catch (e) {
-      dev.log('this problem from tutor by id ${e.toString()}');
+      dev.log('this problem from student post by Id${e.toString()}');
       throw ApiGenericException(code: e.toString());
     }
-    return tutor;
+    return studentPost;
   }
 
-  Future<List<Tutor>> getTutorByUserId(int userId) async {
-    List<Tutor> tutors = [];
-    final uri = Uri.parse("$baseUrl/$tutorRoute?$userIdColumn=$userId");
+  Future<List<StudentPost>> getStudentPostsByFilter(
+    String? location,
+    int? studentMediumIndex,
+    int? studentTypeIndex,
+    int? subjectTypeIndex,
+  ) async {
+    List<StudentPost> studentPosts = [];
+    final Map<String, String> queryParams = {};
+    if (location != null) {
+      queryParams[studentPostLocationColumn] = location;
+    }
+    if (studentMediumIndex != null) {
+      queryParams[studentPostStudentMediumColumn] =
+          studentMediumIndex.toString();
+    }
+    if (studentTypeIndex != null) {
+      queryParams[studentPostStudentTypesColumn] = studentTypeIndex.toString();
+    }
+    if (subjectTypeIndex != null) {
+      queryParams[studentPostSubjectTypesColumn] = subjectTypeIndex.toString();
+    }
+    final uri = Uri.parse('$baseUrl/$studentPostRoute').replace(
+      queryParameters: queryParams,
+    );
+
     dev.log(uri.toString());
+
     try {
       final response = await http.get(
         uri,
@@ -66,21 +91,21 @@ class TutorApi {
       );
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         final List<dynamic> jsonData = json.decode(response.body);
-        tutors = jsonData.map((e) => Tutor.fromJson(e)).toList();
+        studentPosts = jsonData.map((e) => StudentPost.fromJson(e)).toList();
       }
     } on http.ClientException {
       throw ApiClientException();
     } catch (e) {
-      dev.log('get tutor by userID : ${e.toString()}');
+      dev.log('this problem from student post by filter ${e.toString()}');
       throw ApiGenericException(code: e.toString());
     }
-    return tutors;
+    return studentPosts;
   }
 
-  Future<http.Response> postTutor({
+  Future<http.Response> postStudentPost({
     Map<String, dynamic> requestBody = const {},
   }) async {
-    final uri = Uri.parse("$baseUrl/$tutorRoute");
+    final uri = Uri.parse("$baseUrl/$studentPostRoute");
     try {
       final response = await http.post(
         uri,
@@ -103,11 +128,11 @@ class TutorApi {
     }
   }
 
-  Future<http.Response> updateTutor({
-    required int tutorId,
+  Future<http.Response> updateStudentPost({
+    required int studentPostId,
     Map<String, dynamic> body = const {},
   }) async {
-    final uri = Uri.parse("$baseUrl/$tutorRoute/$tutorId");
+    final uri = Uri.parse("$baseUrl/$studentPostRoute/$studentPostId");
     try {
       final response = await http.put(
         uri,
@@ -130,8 +155,8 @@ class TutorApi {
     }
   }
 
-  Future<http.Response> deleteTutor(int tutorId) async {
-    final uri = Uri.parse("$baseUrl/$tutorRoute/$tutorId");
+  Future<http.Response> deleteStudentPost(int studentPostId) async {
+    final uri = Uri.parse("$baseUrl/$studentPostRoute/$studentPostId");
     try {
       final response = await http.delete(
         uri,

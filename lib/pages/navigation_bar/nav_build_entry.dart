@@ -58,7 +58,7 @@ class _NavBuildEntryState extends State<NavBuildEntry> {
       onTap: () async {
         switch (index) {
           case 0:
-            Get.offNamed(WebRoutes.homePage);
+            Get.offNamed(WebRoutes.gatePage);
             break;
           case 1:
             _userStaticsController.userCategory == UserCategory.teacher

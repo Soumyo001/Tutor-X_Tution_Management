@@ -1,12 +1,23 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:convert';
+
 import 'package:flutter/Material.dart';
 import 'package:gap/gap.dart';
+import 'package:provider/provider.dart';
 import 'package:tutor_x_tution_management/components/input_box.dart';
+import 'package:tutor_x_tution_management/controllers/enum_controller.dart';
+import 'package:tutor_x_tution_management/models/student.dart';
+import 'package:tutor_x_tution_management/models/user.dart';
+import 'package:tutor_x_tution_management/service/api/student_api.dart';
+import 'package:tutor_x_tution_management/service/api/user_api.dart';
+import 'package:tutor_x_tution_management/utils/constants.dart';
 
-class StudentInfo2 extends StatefulWidget {
+class StudentInfo1 extends StatefulWidget {
   final void Function(int) change;
   final TextEditingController educationController, locationController;
   final String firstName, lastName, email, password, phoneNumber;
-  const StudentInfo2({
+  const StudentInfo1({
     super.key,
     required this.change,
     required this.educationController,
@@ -19,10 +30,10 @@ class StudentInfo2 extends StatefulWidget {
   });
 
   @override
-  State<StudentInfo2> createState() => _StudentInfo2State();
+  State<StudentInfo1> createState() => _StudentInfo1State();
 }
 
-class _StudentInfo2State extends State<StudentInfo2> {
+class _StudentInfo1State extends State<StudentInfo1> {
   late final TextEditingController _desc;
 
   @override
@@ -33,6 +44,7 @@ class _StudentInfo2State extends State<StudentInfo2> {
 
   @override
   Widget build(BuildContext context) {
+    final e = Provider.of<EnumController>(context);
     return Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -76,7 +88,37 @@ class _StudentInfo2State extends State<StudentInfo2> {
                   ),
                 ),
                 TextButton.icon(
-                  onPressed: () {
+                  onPressed: () async {
+                    final user = User(
+                      userId: 0,
+                      fullName: '${widget.firstName} ${widget.lastName}',
+                      phoneNumber: widget.phoneNumber,
+                      email: widget.email,
+                      password: widget.password,
+                      education: widget.educationController.text,
+                      location: widget.locationController.text,
+                      userType: e.userCategory,
+                    );
+                    final responseUser =
+                        await UserApi().postUser(requestBody: user.toJson());
+
+                    if (responseUser.statusCode >= 200 &&
+                        responseUser.statusCode <= 299) {
+                      final body = jsonDecode(responseUser.body);
+                      final userId = body[userIdColumn];
+                      final student = Student(
+                        studentId: 0,
+                        userId: userId,
+                        firstName: widget.firstName,
+                        lastName: widget.lastName,
+                        studentMedium: e.studentMedium,
+                        studentSelfDescription: _desc.text,
+                        imageData: null,
+                      );
+                      await StudentApi()
+                          .postStudent(requestBody: student.toJson());
+                    }
+
                     Navigator.of(context).pop();
                   },
                   style: TextButton.styleFrom(

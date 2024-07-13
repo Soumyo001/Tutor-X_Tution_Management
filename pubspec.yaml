@@ -47,6 +47,7 @@ dependencies:
   http: ^1.2.1
   image_picker: ^1.1.2
   responsive_builder: ^0.7.1
+  dropdown_button2: ^2.3.9
 
 dev_dependencies:
   flutter_test:

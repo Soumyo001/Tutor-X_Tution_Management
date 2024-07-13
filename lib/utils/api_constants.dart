@@ -13,6 +13,9 @@ const studentRoute = 'Students';
 const tutorRoute = 'Tutors';
 const userRoute = 'Users';
 
+const studentPostRoute = 'StudentPosts';
+const tutorPostRoute = 'TutorPosts';
+
 const headers = <String, String>{
   'Accept': 'application/json',
   'Content-Type': 'application/json; charset=utf-8',

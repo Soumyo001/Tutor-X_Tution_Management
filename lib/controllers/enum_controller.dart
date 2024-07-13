@@ -15,6 +15,7 @@ class EnumController with ChangeNotifier {
       TutorBackgroundCheckType.educational;
   UserCategory _userCategory = UserCategory.student;
   VerificationStatus _verificationStatus = VerificationStatus.unverified;
+  TutionDays _tutionDays = TutionDays.Weekly_3_days;
 
   //getters
   AvailabilityStatus get availabilityStatus => _availabilityStatus;
@@ -30,8 +31,14 @@ class EnumController with ChangeNotifier {
       _tutorBackgroundCheckType;
   UserCategory get userCategory => _userCategory;
   VerificationStatus get verificationStatus => _verificationStatus;
+  TutionDays get tutionDays => _tutionDays;
 
   //setters
+  set tutionDays(TutionDays tutionDays) {
+    _tutionDays = tutionDays;
+    notifyListeners();
+  }
+
   set availabilityStatus(AvailabilityStatus status) {
     _availabilityStatus = status;
     notifyListeners();

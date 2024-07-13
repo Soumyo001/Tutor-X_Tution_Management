@@ -17,10 +17,7 @@ import 'package:tutor_x_tution_management/utils/dialogs/error_dialog.dart';
 
 class LoginPage extends StatefulWidget {
   final void Function() togglePage;
-  const LoginPage({
-    super.key,
-    required this.togglePage,
-  });
+  const LoginPage({super.key, required this.togglePage});
 
   @override
   State<LoginPage> createState() => _LoginPageState();

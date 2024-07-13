@@ -77,9 +77,11 @@ class _RecentStudentDisplayState extends State<RecentStudentDisplay> {
                       primary: false,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: screenSize.width < 800 ? 2 : 3),
-                      itemCount: 6,
+                      itemCount: students.length >= 6 ? 6 : students.length,
                       itemBuilder: (context, index) {
-                        final student = students[students.length - 6 + index];
+                        final student = students[students.length -
+                            (students.length >= 6 ? 6 : students.length) +
+                            index];
                         return FutureBuilder(
                           future: UserApi().getUserById(student.userId),
                           builder: (context, snapshot) {

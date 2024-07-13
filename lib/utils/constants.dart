@@ -97,3 +97,23 @@ const studentReviewRatingColumn = 'rating';
 const studentReviewTextColumn = 'reviewText';
 const studentReviewDateColumn = 'reviewDate';
 const studentReviewStudentColumn = 'student';
+
+//student_post
+const studentPostIdColumn = 'studentPostId';
+const studentPostFullNameColumn = 'fullName';
+const studentPostTutionDaysColumn = 'days';
+const studentPostLocationColumn = 'location';
+const studentPostEducationColumn = 'education';
+const studentPostStudentMediumColumn = 'studentMedium';
+const studentPostStudentTypesColumn = 'studentTypes';
+const studentPostSubjectTypesColumn = 'subjectTypes';
+const studentPostSalaryColumn = 'salary';
+
+//tutor_post
+const tutorPostIdColumn = 'tutorPostId';
+const tutorPostFullNameColumn = 'fullName';
+const tutorPostBioColumn = 'bio';
+const tutorPostLocationColumn = 'location';
+const tutorPostSubjectOfInterestColumn = 'subjectOfInterest';
+const tutorPostStudentMediumColumn = 'studentMedium';
+const tutorPostExpectedStudentColumn = 'expectedStudent';

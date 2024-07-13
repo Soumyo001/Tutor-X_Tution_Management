@@ -11,10 +11,9 @@ class LoginRegisterView extends StatefulWidget {
 }
 
 class _LoginRegisterViewState extends State<LoginRegisterView> {
+  bool isLoginPage = true;
   @override
   Widget build(BuildContext context) {
-    bool isLoginPage = true;
-
     void togglePage() {
       setState(() {
         isLoginPage = !isLoginPage;
@@ -26,9 +25,7 @@ class _LoginRegisterViewState extends State<LoginRegisterView> {
     if (isLoginPage) {
       return LoginPage(togglePage: togglePage);
     } else {
-      return RegisterPage(
-        togglePage: togglePage,
-      );
+      return RegisterPage(togglePage: togglePage);
     }
   }
 }

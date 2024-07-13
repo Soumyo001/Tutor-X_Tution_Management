@@ -2,7 +2,7 @@ import 'package:flutter/Material.dart';
 import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tutor_x_tution_management/pages/setup%20pages/student/student_info_page.dart';
-import 'package:tutor_x_tution_management/pages/setup%20pages/student/student_info_page_2.dart';
+import 'package:tutor_x_tution_management/pages/setup%20pages/student/student_info_page_1.dart';
 
 class StudentWalk extends StatefulWidget {
   final String firstName, lastName, email, password, phoneNumber;
@@ -29,7 +29,7 @@ class _StudentWalkState extends State<StudentWalk> {
           educationController: _educationController,
           locationController: _locationController,
         ),
-        StudentInfo2(
+        StudentInfo1(
           change: _changePage,
           educationController: _educationController,
           locationController: _locationController,

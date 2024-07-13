@@ -2,7 +2,6 @@ import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:tutor_x_tution_management/pages/auth.dart';
 import 'package:tutor_x_tution_management/pages/main_pages/about_page.dart';
-import 'package:tutor_x_tution_management/pages/main_pages/home_page.dart';
 import 'package:tutor_x_tution_management/pages/main_pages/pre_info_page.dart';
 import 'package:tutor_x_tution_management/pages/main_pages/resource_page.dart';
 import 'package:tutor_x_tution_management/pages/main_pages/students_page.dart';
@@ -23,42 +22,42 @@ class WebRoutes {
     GetPage(
       name: authPage,
       page: () => const Auth(),
-      transition: Transition.leftToRightWithFade,
+      transition: Transition.noTransition,
     ),
     GetPage(
       name: gatePage,
       page: () => const PreInfoPage(),
-      transition: Transition.leftToRightWithFade,
+      transition: Transition.noTransition,
     ),
-    GetPage(
-      name: homePage,
-      page: () => const HomePage(),
-      transition: Transition.leftToRightWithFade,
-    ),
+    // GetPage(
+    //   name: homePage,
+    //   page: () => const HomePage(),
+    //   transition: Transition.noTransition,
+    // ),
     GetPage(
       name: tutorsPage,
       page: () => const TutorPage(),
-      transition: Transition.leftToRightWithFade,
+      transition: Transition.noTransition,
     ),
     GetPage(
       name: tutionsPage,
       page: () => const TutionsPage(),
-      transition: Transition.leftToRightWithFade,
+      transition: Transition.noTransition,
     ),
     GetPage(
       name: studentPage,
       page: () => const StudentPage(),
-      transition: Transition.leftToRightWithFade,
+      transition: Transition.noTransition,
     ),
     GetPage(
       name: resourcePage,
       page: () => const ResourcePage(),
-      transition: Transition.leftToRightWithFade,
+      transition: Transition.noTransition,
     ),
     GetPage(
       name: aboutPage,
       page: () => const AboutPage(),
-      transition: Transition.leftToRightWithFade,
+      transition: Transition.noTransition,
     ),
   ];
 }

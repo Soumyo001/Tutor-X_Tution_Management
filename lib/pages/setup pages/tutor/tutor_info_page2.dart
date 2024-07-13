@@ -101,23 +101,26 @@ class _TutorInfo2State extends State<TutorInfo2> {
                   );
                   final responseUser =
                       await UserApi().postUser(requestBody: user.toJson());
-                  final body = jsonDecode(responseUser.body);
-                  final userId = body[userIdColumn];
-                  final tutor = Tutor(
-                    tutorId: 0,
-                    userId: userId,
-                    status: e.availabilityStatus,
-                    mediumOfInterest: e.studentMedium,
-                    expectedStudent: e.studentTypes,
-                    subjectOfInterest: e.subjectTypes,
-                    expectedSalary: int.parse(widget.salaryController.text),
-                    profession: e.professionType,
-                    verificationStatus: e.verificationStatus,
-                    tutorSelfDescription: _desc.text,
-                    imageData: null,
-                  );
+                  if (responseUser.statusCode >= 200 &&
+                      responseUser.statusCode <= 299) {
+                    final body = jsonDecode(responseUser.body);
+                    final userId = body[userIdColumn];
+                    final tutor = Tutor(
+                      tutorId: 0,
+                      userId: userId,
+                      status: e.availabilityStatus,
+                      mediumOfInterest: e.studentMedium,
+                      expectedStudent: e.studentTypes,
+                      subjectOfInterest: e.subjectTypes,
+                      expectedSalary: int.parse(widget.salaryController.text),
+                      profession: e.professionType,
+                      verificationStatus: e.verificationStatus,
+                      tutorSelfDescription: _desc.text,
+                      imageData: null,
+                    );
 
-                  await TutorApi().postTutor(requestBody: tutor.toJson());
+                    await TutorApi().postTutor(requestBody: tutor.toJson());
+                  }
 
                   Navigator.of(context).pop();
                 },

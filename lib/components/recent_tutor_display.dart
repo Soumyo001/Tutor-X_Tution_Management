@@ -70,11 +70,16 @@ class _RecentTutorsDisplayState extends State<RecentTutorsDisplay> {
                   : ListView.builder(
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
-                      itemCount: screenSize.width < 800 ? 2 : 4,
+                      itemCount: screenSize.width < 800
+                          ? (tutors.length >= 2 ? 2 : tutors.length)
+                          : (tutors.length >= 4 ? 4 : tutors.length),
                       itemBuilder: (context, index) {
-                        final tutor = tutors[tutors.length -
-                            (screenSize.width < 800 ? 2 : 4) +
-                            index];
+                        int idx = tutors.length -
+                            (screenSize.width < 800
+                                ? (tutors.length >= 2 ? 2 : tutors.length)
+                                : (tutors.length >= 4 ? 4 : tutors.length)) +
+                            index;
+                        final tutor = tutors[idx];
                         return FutureBuilder(
                           future: UserApi().getUserById(tutor.userId),
                           builder: (context, snapshot) {
@@ -150,15 +155,10 @@ class _RecentTutorsDisplayState extends State<RecentTutorsDisplay> {
                                                     dev.log(
                                                         _imageData.toString());
                                                     await _pickImage(
-                                                      tutors[tutors.length -
-                                                          (screenSize.width <
-                                                                  800
-                                                              ? 2
-                                                              : 4) +
-                                                          index],
+                                                      tutors[idx],
                                                     );
                                                     dev.log(
-                                                        'Picked: ${tutors[tutors.length - (screenSize.width < 800 ? 2 : 4) + index].imageData} ${tutors.length - (screenSize.width < 800 ? 2 : 4) + index} ${tutors.length}');
+                                                        'Picked: ${tutors[idx].imageData} $idx ${tutors.length}');
                                                   },
                                                   padding:
                                                       const EdgeInsets.all(16),

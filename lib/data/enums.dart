@@ -44,3 +44,11 @@ enum TutorBackgroundCheckType { educational, professional, tutoringbackground }
 enum UserCategory { teacher, student }
 
 enum VerificationStatus { verified, unverified }
+
+enum TutionDays {
+  Weekly_3_days,
+  Weekly_4_days,
+  Weekly_5_days,
+  Weekly_6_days,
+  Weekly_7_days
+}

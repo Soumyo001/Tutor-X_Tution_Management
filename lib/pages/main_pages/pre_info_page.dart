@@ -9,7 +9,7 @@ import 'package:tutor_x_tution_management/service/api/tutor_api.dart';
 import 'package:tutor_x_tution_management/service/api/user_api.dart';
 import 'package:tutor_x_tution_management/service/auth/auth_service.dart';
 import 'package:tutor_x_tution_management/controllers/statics_controller.dart';
-//import 'dart:developer' as dev;
+import 'dart:developer' as dev;
 
 class PreInfoPage extends StatefulWidget {
   const PreInfoPage({super.key});
@@ -28,18 +28,22 @@ class _PreInfoPageState extends State<PreInfoPage> {
       if (user.isNotEmpty) {
         _userStaticsController.userCategory = user.first.userType;
         _userStaticsController.userName = user.first.fullName;
-        // dev.log('MESSEGE: Inside User Data');
+        _userStaticsController.userEmail = user.first.email;
+        _userStaticsController.userEducation = user.first.education;
+        _userStaticsController.userEducation = user.first.location;
+        _userStaticsController.userPhoneNumber = user.first.phoneNumber;
+        dev.log('MESSEGE: Inside User Data');
         switch (user.first.userType) {
           case UserCategory.teacher:
             final teacher =
                 await TutorApi().getTutorByUserId(user.first.userId);
             if (teacher.isNotEmpty) {
-              //dev.log('MESSEGE: Inside teacher : ${teacher.first.imageData}');
+              dev.log('MESSEGE: Inside teacher : ${teacher.first.imageData}');
               if (teacher.first.imageData != null) {
                 _userStaticsController.imageData =
                     base64Decode(teacher.first.imageData!);
-                // dev.log(
-                //  'MESSEGE: Inside teacher image data : ${Statics.imageData}');
+                dev.log(
+                    'MESSEGE: Inside teacher image data : ${Get.find<UserStaticsController>().imageData}');
               }
             }
             break;
@@ -74,6 +78,7 @@ class _PreInfoPageState extends State<PreInfoPage> {
       future: getUserData(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
+          print('AGAIN CALLED PRE INFO !!!!!!');
           return const HomePage();
         } else {
           return const Center(
