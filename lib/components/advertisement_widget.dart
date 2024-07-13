@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/Material.dart';
 import 'package:get/get.dart';
 import 'package:tutor_x_tution_management/data/tips.dart';
+import 'package:tutor_x_tution_management/utils/dialogs/error_dialog.dart';
 
 class Advertisement extends StatefulWidget {
   const Advertisement({super.key});
@@ -14,20 +15,22 @@ class Advertisement extends StatefulWidget {
 
 class _AdvertisementState extends State<Advertisement> {
   RxString currentTip = Tips.tipsStudent[0].obs;
-  int prevIdx = 0;
 
-  void _changeTips() {
-    Timer.periodic(const Duration(minutes: 3), (timer) {
-      setState(() {
+  void _changeTips() async {
+    int prevIdx = 0;
+    try {
+      Timer.periodic(const Duration(minutes: 1), (timer) {
         final r = Random();
-        int idx = r.nextInt(1000) % Tips.tipsStudent.length;
+        int idx = r.nextInt(100) % Tips.tipsStudent.length;
         while (idx == prevIdx) {
-          idx = r.nextInt(1000) % Tips.tipsStudent.length;
+          idx = r.nextInt(100) % Tips.tipsStudent.length;
         }
-        currentTip.value = Tips.tipsStudent[idx];
         prevIdx = idx;
+        currentTip.value = Tips.tipsStudent[idx];
       });
-    });
+    } catch (e) {
+      await showErrorDialog(context, e.toString());
+    }
   }
 
   @override

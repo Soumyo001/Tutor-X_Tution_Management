@@ -28,7 +28,7 @@ class StudentApi {
     } on http.ClientException {
       throw ApiClientException();
     } catch (e) {
-      dev.log('this problem ${e.toString()}');
+      dev.log('this problem from student ${e.toString()}');
       throw ApiGenericException(code: e.toString());
     }
     return students;
@@ -49,6 +49,7 @@ class StudentApi {
     } on http.ClientException {
       throw ApiClientException();
     } catch (e) {
+      dev.log('this problem from student by Id${e.toString()}');
       throw ApiGenericException(code: e.toString());
     }
     return student;
@@ -69,7 +70,7 @@ class StudentApi {
     } on http.ClientException {
       throw ApiClientException();
     } catch (e) {
-      dev.log(e.toString());
+      dev.log('this problem from student by userId ${e.toString()}');
       throw ApiGenericException(code: e.toString());
     }
     return students;

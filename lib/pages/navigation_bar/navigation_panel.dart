@@ -1,74 +1,26 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:tutor_x_tution_management/color_pallete.dart';
-import 'package:tutor_x_tution_management/data/enums.dart';
 import 'package:tutor_x_tution_management/pages/navigation_bar/nav_build_entry.dart';
-import 'package:tutor_x_tution_management/service/api/student_api.dart';
-import 'package:tutor_x_tution_management/service/api/tutor_api.dart';
-import 'package:tutor_x_tution_management/service/api/user_api.dart';
-import 'package:tutor_x_tution_management/service/auth/auth_service.dart';
+import 'package:tutor_x_tution_management/controllers/statics_controller.dart';
 
 class NavigationPanel extends StatefulWidget {
-  const NavigationPanel({
-    super.key,
-  });
+  const NavigationPanel({super.key});
 
   @override
   State<NavigationPanel> createState() => _NavigationPanelState();
 }
 
 class _NavigationPanelState extends State<NavigationPanel> {
-  RxBool isMainPageHovered = false.obs;
-  RxBool isProfileTapped = false.obs;
-  RxString userName = "".obs;
-  Uint8List? _imageData;
-
-  void getUsername() async {
-    final currentUser = AuthService.fromFirebase().currentUser;
-    if (currentUser != null) {
-      final user = await UserApi().getUserByEmail(currentUser.email!);
-      if (user.isNotEmpty) {
-        userName.value = user.first.fullName;
-        switch (user.first.userType) {
-          case UserCategory.teacher:
-            final teacher =
-                await TutorApi().getTutorByUserId(user.first.userId);
-            if (teacher.isNotEmpty) {
-              if (teacher.first.imageData != null) {
-                setState(() {
-                  _imageData = base64Decode(teacher.first.imageData!);
-                });
-              }
-            }
-            break;
-          case UserCategory.student:
-            final student =
-                await StudentApi().getStudentByUserId(user.first.userId);
-            if (student.isNotEmpty) {
-              if (student.first.imageData != null) {
-                setState(() {
-                  _imageData = base64Decode(student.first.imageData!);
-                });
-              }
-            }
-            break;
-          default:
-            break;
-        }
-      } else {
-        userName.value = 'Shifat jaman';
-      }
-    }
-  }
+  late final UserStaticsController _userStaticsController;
+  final RxBool isMainPageHovered = false.obs;
+  final RxBool isProfileTapped = false.obs;
 
   @override
   void initState() {
     super.initState();
-    getUsername();
+    _userStaticsController = Get.find<UserStaticsController>();
   }
 
   @override
@@ -151,22 +103,23 @@ class _NavigationPanelState extends State<NavigationPanel> {
                         const Gap(7),
                         Row(
                           children: [
-                            CircleAvatar(
-                              radius: 12,
-                              backgroundImage: _imageData != null
-                                  ? MemoryImage(_imageData!)
-                                  : null,
-                              child: _imageData == null
-                                  ? const CircleAvatar(
-                                      backgroundImage: AssetImage(
-                                          'lib/assets/images/person.jpg'),
-                                    )
-                                  : null,
+                            Obx(
+                              () => CircleAvatar(
+                                radius: 12,
+                                backgroundImage:
+                                    _userStaticsController.imageData != null
+                                        ? MemoryImage(
+                                            _userStaticsController.imageData!)
+                                        : null,
+                                child: _userStaticsController.imageData == null
+                                    ? const Icon(Icons.person)
+                                    : null,
+                              ),
                             ),
                             const Gap(7),
                             Obx(
                               () => Text(
-                                userName.value,
+                                _userStaticsController.userName,
                                 style: TextStyle(
                                   fontSize: 17,
                                   color: isProfileTapped.value

@@ -11,22 +11,24 @@ class LoginRegisterView extends StatefulWidget {
 }
 
 class _LoginRegisterViewState extends State<LoginRegisterView> {
-  bool isLoginPage = true;
-
-  void togglePage() {
-    setState(() {
-      isLoginPage = !isLoginPage;
-      ValidationFlags.isOnLogin = isLoginPage;
-      ValidationFlags.isOnRegister = !isLoginPage;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    bool isLoginPage = true;
+
+    void togglePage() {
+      setState(() {
+        isLoginPage = !isLoginPage;
+        ValidationFlags.isOnLogin = isLoginPage;
+        ValidationFlags.isOnRegister = !isLoginPage;
+      });
+    }
+
     if (isLoginPage) {
       return LoginPage(togglePage: togglePage);
     } else {
-      return RegisterPage(togglePage: togglePage);
+      return RegisterPage(
+        togglePage: togglePage,
+      );
     }
   }
 }

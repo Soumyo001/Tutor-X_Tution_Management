@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:tutor_x_tution_management/controllers/enum_controller.dart';
+import 'package:tutor_x_tution_management/controllers/statics_controller.dart';
 import 'package:tutor_x_tution_management/pages/main_pages/home_page.dart';
 import 'package:tutor_x_tution_management/routes/route.dart';
 import 'package:tutor_x_tution_management/service/auth/auth_service.dart';
@@ -9,6 +10,7 @@ import 'package:tutor_x_tution_management/service/auth/auth_service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AuthService.fromFirebase().initializeApp();
+  Get.put(UserStaticsController());
   runApp(
     ChangeNotifierProvider(
       create: (context) => EnumController(),
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
       title: 'Tutor-X: Tution ManageMent',
       home: const HomePage(),
       initialRoute: AuthService.fromFirebase().isLoggedIn()
-          ? WebRoutes.homePage
+          ? WebRoutes.gatePage
           : WebRoutes.authPage,
       getPages: WebRoutes.routes,
       theme: ThemeData(

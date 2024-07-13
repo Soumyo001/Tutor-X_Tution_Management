@@ -7,13 +7,11 @@ import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:tutor_x_tution_management/components/input_box.dart';
 import 'package:tutor_x_tution_management/controllers/enum_controller.dart';
-import 'package:tutor_x_tution_management/helpers/validator/validating_flags.dart';
 import 'package:tutor_x_tution_management/models/tutor.dart';
 import 'package:tutor_x_tution_management/models/user.dart';
 import 'package:tutor_x_tution_management/service/api/tutor_api.dart';
 import 'package:tutor_x_tution_management/service/api/user_api.dart';
 import 'package:tutor_x_tution_management/utils/constants.dart';
-import 'package:tutor_x_tution_management/utils/dialogs/error_dialog2.dart';
 
 class TutorInfo2 extends StatefulWidget {
   final void Function(int) change;
@@ -103,39 +101,24 @@ class _TutorInfo2State extends State<TutorInfo2> {
                   );
                   final responseUser =
                       await UserApi().postUser(requestBody: user.toJson());
-                  if (responseUser.statusCode >= 200 &&
-                      responseUser.statusCode <= 299) {
-                    ValidationFlags.isUserInfoOk = true;
-                    final body = jsonDecode(responseUser.body);
-                    final userId = body[userIdColumn];
-                    final tutor = Tutor(
-                      tutorId: 0,
-                      userId: userId,
-                      status: e.availabilityStatus,
-                      mediumOfInterest: e.studentMedium,
-                      expectedStudent: e.studentTypes,
-                      subjectOfInterest: e.subjectTypes,
-                      expectedSalary: int.parse(widget.salaryController.text),
-                      profession: e.professionType,
-                      verificationStatus: e.verificationStatus,
-                      tutorSelfDescription: _desc.text,
-                      imageData: null,
-                    );
-                    final responseTutor =
-                        await TutorApi().postTutor(requestBody: tutor.toJson());
-                    ValidationFlags.isTutorInfoOk =
-                        (responseTutor.statusCode >= 200 &&
-                                responseTutor.statusCode <= 299
-                            ? true
-                            : false);
-                  } else {
-                    ValidationFlags.isUserInfoOk = false;
-                  }
-                  if (!ValidationFlags.isUserInfoOk ||
-                      !ValidationFlags.isTutorInfoOk) {
-                    await showErrorDialog2(
-                        context, 'Please go back and Sign in again');
-                  }
+                  final body = jsonDecode(responseUser.body);
+                  final userId = body[userIdColumn];
+                  final tutor = Tutor(
+                    tutorId: 0,
+                    userId: userId,
+                    status: e.availabilityStatus,
+                    mediumOfInterest: e.studentMedium,
+                    expectedStudent: e.studentTypes,
+                    subjectOfInterest: e.subjectTypes,
+                    expectedSalary: int.parse(widget.salaryController.text),
+                    profession: e.professionType,
+                    verificationStatus: e.verificationStatus,
+                    tutorSelfDescription: _desc.text,
+                    imageData: null,
+                  );
+
+                  await TutorApi().postTutor(requestBody: tutor.toJson());
+
                   Navigator.of(context).pop();
                 },
                 style: TextButton.styleFrom(

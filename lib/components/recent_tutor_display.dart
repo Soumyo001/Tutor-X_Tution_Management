@@ -131,7 +131,7 @@ class _RecentTutorsDisplayState extends State<RecentTutorsDisplay> {
                                           const Gap(2),
                                           TutorDisplayWidget(
                                             text:
-                                                'interested: ${tutor.subjectOfInterest.toString().split('.').last}',
+                                                'interested: ${tutor.subjectOfInterest.toString().split('.').last.replaceAll('_', ' ')}',
                                           ),
                                           const Gap(2),
                                           TutorDisplayWidget(
@@ -147,6 +147,8 @@ class _RecentTutorsDisplayState extends State<RecentTutorsDisplay> {
                                               children: [
                                                 MaterialButton(
                                                   onPressed: () async {
+                                                    dev.log(
+                                                        _imageData.toString());
                                                     await _pickImage(
                                                       tutors[tutors.length -
                                                           (screenSize.width <
@@ -155,6 +157,8 @@ class _RecentTutorsDisplayState extends State<RecentTutorsDisplay> {
                                                               : 4) +
                                                           index],
                                                     );
+                                                    dev.log(
+                                                        'Picked: ${tutors[tutors.length - (screenSize.width < 800 ? 2 : 4) + index].imageData} ${tutors.length - (screenSize.width < 800 ? 2 : 4) + index} ${tutors.length}');
                                                   },
                                                   padding:
                                                       const EdgeInsets.all(16),

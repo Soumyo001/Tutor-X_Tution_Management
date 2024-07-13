@@ -10,6 +10,7 @@ import 'package:tutor_x_tution_management/components/input_box.dart';
 import 'package:tutor_x_tution_management/components/login_signup_button.dart';
 import 'package:tutor_x_tution_management/components/social_button.dart';
 import 'package:tutor_x_tution_management/helpers/loading/loading_helper.dart';
+import 'package:tutor_x_tution_management/routes/route.dart';
 import 'package:tutor_x_tution_management/service/auth/auth_exceptions.dart';
 import 'package:tutor_x_tution_management/service/auth/auth_service.dart';
 import 'package:tutor_x_tution_management/utils/dialogs/error_dialog.dart';
@@ -47,6 +48,10 @@ class _LoginPageState extends State<LoginPage> {
       await AuthService.fromFirebase().logIn(
           email: _emailEditingController.text,
           password: _passwordEditingController.text);
+
+      setState(() {
+        WebRoutes.webNavigationBarIndex = 0;
+      });
 
       LoadingHelper().close();
     } on UserNotLoggedInException catch (e) {

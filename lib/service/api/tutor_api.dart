@@ -28,6 +28,7 @@ class TutorApi {
     } on http.ClientException {
       throw ApiClientException();
     } catch (e) {
+      dev.log('this problem from tutor ${e.toString()}');
       throw ApiGenericException(code: e.toString());
     }
     return tutors;
@@ -48,6 +49,7 @@ class TutorApi {
     } on http.ClientException {
       throw ApiClientException();
     } catch (e) {
+      dev.log('this problem from tutor by id ${e.toString()}');
       throw ApiGenericException(code: e.toString());
     }
     return tutor;
@@ -65,9 +67,6 @@ class TutorApi {
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         final List<dynamic> jsonData = json.decode(response.body);
         tutors = jsonData.map((e) => Tutor.fromJson(e)).toList();
-        tutors.forEach((element) {
-          dev.log(element.toString());
-        });
       }
     } on http.ClientException {
       throw ApiClientException();
