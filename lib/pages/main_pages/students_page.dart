@@ -37,7 +37,7 @@ class _StudentPageState extends State<StudentPage> {
         child: Column(
           children: [
             const NavigationPanel(),
-            const Gap(20),
+            const Gap(18),
             StudentFiltering(
               onFilter: () async {
                 final studentPosts =
