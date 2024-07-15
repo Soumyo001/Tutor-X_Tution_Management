@@ -34,7 +34,10 @@ class _RecentStudentPostsState extends State<RecentStudentPosts> {
             StudentPostApi().getStudentPostsByFilter(null, null, null, null),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            _filterController.studentPosts = snapshot.data as List<StudentPost>;
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _filterController.studentPosts =
+                  snapshot.data as List<StudentPost>;
+            });
             return Obx(
               () => _filterController.studentPosts.isEmpty
                   ? Center(
@@ -49,7 +52,6 @@ class _RecentStudentPostsState extends State<RecentStudentPosts> {
                     )
                   : GridView.builder(
                       shrinkWrap: true,
-                      primary: false,
                       scrollDirection: Axis.vertical,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: screenSize.width < 800 ? 2 : 3),

@@ -51,9 +51,12 @@ class _PreInfoPageState extends State<PreInfoPage> {
             final student =
                 await StudentApi().getStudentByUserId(user.first.userId);
             if (student.isNotEmpty) {
+              dev.log('MESSEGE: Inside student : ${student.first.imageData}');
               if (student.first.imageData != null) {
                 _userStaticsController.imageData =
                     base64Decode(student.first.imageData!);
+                dev.log(
+                    'MESSEGE: Inside student image data : ${Get.find<UserStaticsController>().imageData}');
               }
             }
             break;

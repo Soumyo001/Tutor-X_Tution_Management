@@ -7,6 +7,7 @@ import 'package:tutor_x_tution_management/components/error_borders.dart';
 import 'package:tutor_x_tution_management/components/input_box.dart';
 import 'package:tutor_x_tution_management/components/login_signup_button.dart';
 import 'package:tutor_x_tution_management/components/registration_tutor_profession_type.dart';
+import 'package:tutor_x_tution_management/controllers/nav_option_index_controller.dart';
 import 'package:tutor_x_tution_management/helpers/loading/loading_helper.dart';
 import 'package:tutor_x_tution_management/helpers/validator/email_validator.dart';
 import 'package:tutor_x_tution_management/helpers/validator/generic_validator.dart';
@@ -30,6 +31,7 @@ class _TutorRegistrationFormState extends State<TutorRegistrationForm> {
   late final TextEditingController _passwordEditingController;
   late final TextEditingController _phoneController;
   late final TextEditingController _confirmPass;
+  late final NavIndexController _navIndexController;
   final RxBool isPasswrodVisible = false.obs;
   RxBool isConfirmPasswrodVisible = false.obs;
 
@@ -41,6 +43,7 @@ class _TutorRegistrationFormState extends State<TutorRegistrationForm> {
     _passwordEditingController = TextEditingController();
     _phoneController = TextEditingController();
     _confirmPass = TextEditingController();
+    _navIndexController = Get.find<NavIndexController>();
   }
 
   void onEmailChange(String value) {
@@ -190,6 +193,7 @@ class _TutorRegistrationFormState extends State<TutorRegistrationForm> {
         confirmPassword: _confirmPass.text,
         phone: _phoneController.text,
       );
+      await _navIndexController.saveNavigationIndex(0);
       LoadingHelper().close();
       final user = AuthService.fromFirebase().currentUser;
       if (user != null) {

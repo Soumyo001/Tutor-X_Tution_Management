@@ -7,15 +7,16 @@ import 'package:tutor_x_tution_management/components/filter_widget.dart';
 import 'package:tutor_x_tution_management/data/enums.dart';
 import 'package:tutor_x_tution_management/data/irl_locations.dart';
 
-class StudentFiltering extends StatefulWidget {
+class Filtering extends StatefulWidget {
+  final String text;
   final void Function()? onFilter;
-  const StudentFiltering({super.key, required this.onFilter});
+  const Filtering({super.key, required this.onFilter, required this.text});
 
   @override
-  State<StudentFiltering> createState() => _StudentFilteringState();
+  State<Filtering> createState() => _FilteringState();
 }
 
-class _StudentFilteringState extends State<StudentFiltering> {
+class _FilteringState extends State<Filtering> {
   final Rx<String?> _selectedValueArea = Rx<String?>(null);
   final Rx<String?> _selectedValueMedium = Rx<String?>(null);
   final Rx<String?> _selectedValueClass = Rx<String?>(null);
@@ -43,9 +44,9 @@ class _StudentFilteringState extends State<StudentFiltering> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text(
-                  'Find Your Students',
-                  style: TextStyle(
+                Text(
+                  widget.text,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 35,
                   ),

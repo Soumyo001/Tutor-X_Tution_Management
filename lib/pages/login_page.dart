@@ -9,8 +9,8 @@ import 'package:tutor_x_tution_management/color_pallete.dart';
 import 'package:tutor_x_tution_management/components/input_box.dart';
 import 'package:tutor_x_tution_management/components/login_signup_button.dart';
 import 'package:tutor_x_tution_management/components/social_button.dart';
+import 'package:tutor_x_tution_management/controllers/nav_option_index_controller.dart';
 import 'package:tutor_x_tution_management/helpers/loading/loading_helper.dart';
-import 'package:tutor_x_tution_management/routes/route.dart';
 import 'package:tutor_x_tution_management/service/auth/auth_exceptions.dart';
 import 'package:tutor_x_tution_management/service/auth/auth_service.dart';
 import 'package:tutor_x_tution_management/utils/dialogs/error_dialog.dart';
@@ -26,11 +26,13 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   late final TextEditingController _emailEditingController;
   late final TextEditingController _passwordEditingController;
+  late final NavIndexController _navIndexController;
   RxBool isPasswrodVisible = false.obs;
 
   @override
   void initState() {
     super.initState();
+    _navIndexController = Get.find<NavIndexController>();
     _emailEditingController = TextEditingController();
     _passwordEditingController = TextEditingController();
   }
@@ -46,9 +48,7 @@ class _LoginPageState extends State<LoginPage> {
           email: _emailEditingController.text,
           password: _passwordEditingController.text);
 
-      setState(() {
-        WebRoutes.webNavigationBarIndex = 0;
-      });
+      await _navIndexController.saveNavigationIndex(0);
 
       LoadingHelper().close();
     } on UserNotLoggedInException catch (e) {

@@ -1,10 +1,13 @@
 import 'package:flutter/Material.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:tutor_x_tution_management/components/advertisement_widget.dart';
 import 'package:tutor_x_tution_management/components/recent_post_text.dart';
-import 'package:tutor_x_tution_management/components/recent_student_display.dart';
-import 'package:tutor_x_tution_management/components/recent_tutor_display.dart';
+import 'package:tutor_x_tution_management/components/recent_student_post_display.dart';
+import 'package:tutor_x_tution_management/components/recent_tutor_post_display.dart';
+import 'package:tutor_x_tution_management/controllers/nav_option_index_controller.dart';
+import 'package:tutor_x_tution_management/routes/route.dart';
 
 class DashBoard extends StatefulWidget {
   const DashBoard({super.key});
@@ -14,6 +17,14 @@ class DashBoard extends StatefulWidget {
 }
 
 class _DashBoardState extends State<DashBoard> {
+  late final NavIndexController _navIndexController;
+
+  @override
+  void initState() {
+    super.initState();
+    _navIndexController = Get.find<NavIndexController>();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -25,10 +36,13 @@ class _DashBoardState extends State<DashBoard> {
           RecentPost(
             text: 'Tutors (Recently Posted)',
             buttonText: 'View All',
-            onPressed: () {},
+            onPressed: () async {
+              await _navIndexController.saveNavigationIndex(1);
+              Get.offNamed(WebRoutes.tutorsPage);
+            },
           ),
           const Gap(10),
-          const RecentTutorsDisplay(),
+          const RecentTutorPost(),
           const Gap(20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 64.0),
@@ -42,12 +56,15 @@ class _DashBoardState extends State<DashBoard> {
           const Advertisement(),
           const Gap(20),
           RecentPost(
-            onPressed: () {},
+            onPressed: () async {
+              await _navIndexController.saveNavigationIndex(2);
+              Get.offNamed(WebRoutes.tutionsPage);
+            },
             text: 'Students (Recently Posted)',
             buttonText: 'View All',
           ),
           const Gap(20),
-          const RecentStudentDisplay(),
+          const RecentStudentPosts(),
         ],
       ),
     );

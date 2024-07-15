@@ -82,7 +82,7 @@ class StudentPostApi {
       queryParameters: queryParams,
     );
 
-    dev.log(uri.toString());
+    dev.log('from student post by filer function : ${uri.toString()}');
 
     try {
       final response = await http.get(

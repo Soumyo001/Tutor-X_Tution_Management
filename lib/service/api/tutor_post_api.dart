@@ -64,8 +64,26 @@ class TutorPostApi {
     int? studentTypeIndex,
   ) async {
     List<TutorPost> tutorPosts = [];
-    final uri = Uri.parse(
-        "$baseUrl/$tutorPostRoute?$tutorPostLocationColumn=$location&$tutorPostStudentMediumColumn=$studentMediumIndex&$tutorPostSubjectOfInterestColumn=$subjectTypeIndex&$tutorPostExpectedStudentColumn=$studentTypeIndex");
+    final Map<String, String> queryParameters = {};
+    if (location != null) {
+      queryParameters[tutorPostLocationColumn] = location;
+    }
+    if (studentMediumIndex != null) {
+      queryParameters[tutorPostStudentMediumColumn] =
+          studentMediumIndex.toString();
+    }
+    if (subjectTypeIndex != null) {
+      queryParameters[tutorPostSubjectOfInterestColumn] =
+          subjectTypeIndex.toString();
+    }
+    if (studentTypeIndex != null) {
+      queryParameters[tutorPostExpectedStudentColumn] =
+          studentTypeIndex.toString();
+    }
+    final uri = Uri.parse("$baseUrl/$tutorPostRoute")
+        .replace(queryParameters: queryParameters);
+
+    dev.log('from tutor post by filer function :\n ${uri.toString()}');
     try {
       final response = await http.get(
         uri,

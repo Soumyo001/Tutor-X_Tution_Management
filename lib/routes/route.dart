@@ -4,17 +4,14 @@ import 'package:tutor_x_tution_management/pages/auth.dart';
 import 'package:tutor_x_tution_management/pages/main_pages/about_page.dart';
 import 'package:tutor_x_tution_management/pages/main_pages/pre_info_page.dart';
 import 'package:tutor_x_tution_management/pages/main_pages/resource_page.dart';
-import 'package:tutor_x_tution_management/pages/main_pages/students_page.dart';
 import 'package:tutor_x_tution_management/pages/main_pages/tutions_page.dart';
 import 'package:tutor_x_tution_management/pages/main_pages/tutor_page.dart';
 
 class WebRoutes {
-  static int webNavigationBarIndex = 0;
   static const homePage = '/';
   static const gatePage = '/gate';
   static const tutorsPage = '/tutor';
   static const tutionsPage = '/tutions';
-  static const studentPage = '/students';
   static const resourcePage = '/resources';
   static const aboutPage = '/about';
   static const authPage = '/OAuthenticatior';
@@ -42,11 +39,6 @@ class WebRoutes {
     GetPage(
       name: tutionsPage,
       page: () => const TutionsPage(),
-      transition: Transition.noTransition,
-    ),
-    GetPage(
-      name: studentPage,
-      page: () => const StudentPage(),
       transition: Transition.noTransition,
     ),
     GetPage(

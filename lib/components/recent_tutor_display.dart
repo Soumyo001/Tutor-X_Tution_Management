@@ -87,102 +87,106 @@ class _RecentTutorsDisplayState extends State<RecentTutorsDisplay> {
                               case ConnectionState.done:
                                 final userData = snapshot.data as User;
                                 return Container(
-                                  padding: const EdgeInsets.all(8),
                                   width: 300,
                                   height: 300,
                                   child: Card(
                                     shadowColor: Colors.grey.shade500,
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 16.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          tutor.imageData != null
-                                              ? Image.memory(
-                                                  base64Decode(
-                                                      tutor.imageData!),
-                                                  width: 255,
-                                                  height: 120,
-                                                  fit: BoxFit.fill)
-                                              : Image.asset(
-                                                  'lib/assets/images/profile_placeholder.jpg',
-                                                  width: 270,
-                                                  height: 120,
-                                                  fit: BoxFit.fill,
-                                                ),
-                                          const Spacer(),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        tutor.imageData != null
+                                            ? Image.memory(
+                                                base64Decode(tutor.imageData!),
+                                                width: 300,
+                                                height: 120,
+                                                fit: BoxFit.fill)
+                                            : Image.asset(
+                                                'lib/assets/images/profile_placeholder.jpg',
+                                                width: 270,
+                                                height: 120,
+                                                fit: BoxFit.fill,
+                                              ),
+                                        const Spacer(),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            TutorDisplayWidget(
+                                              text: userData.fullName,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 17,
+                                            ),
+                                          ],
+                                        ),
+                                        const Gap(13),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 16.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               TutorDisplayWidget(
-                                                text: userData.fullName,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 17,
+                                                text:
+                                                    'Status: ${tutor.status.toString().split('.').last}',
+                                              ),
+                                              const Gap(2),
+                                              TutorDisplayWidget(
+                                                text:
+                                                    'Bio: ${userData.education}',
+                                              ),
+                                              const Gap(2),
+                                              TutorDisplayWidget(
+                                                text:
+                                                    'interested: ${tutor.subjectOfInterest.toString().split('.').last.replaceAll('_', ' ')}',
+                                              ),
+                                              const Gap(2),
+                                              TutorDisplayWidget(
+                                                text:
+                                                    'Class: ${tutor.expectedStudent.toString().split('.').last.replaceAll('_', ' ').replaceAll('to', '-')}',
                                               ),
                                             ],
                                           ),
-                                          const Gap(13),
-                                          TutorDisplayWidget(
-                                            text:
-                                                'Status: ${tutor.status.toString().split('.').last}',
-                                          ),
-                                          const Gap(2),
-                                          TutorDisplayWidget(
-                                            text: 'Bio: ${userData.education}',
-                                          ),
-                                          const Gap(2),
-                                          TutorDisplayWidget(
-                                            text:
-                                                'interested: ${tutor.subjectOfInterest.toString().split('.').last.replaceAll('_', ' ')}',
-                                          ),
-                                          const Gap(2),
-                                          TutorDisplayWidget(
-                                            text:
-                                                'Class: ${tutor.expectedStudent.toString().split('.').last.replaceAll('_', ' ').replaceAll('to', '-')}',
-                                          ),
-                                          const Spacer(),
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                MaterialButton(
-                                                  onPressed: () async {
-                                                    dev.log(
-                                                        _imageData.toString());
-                                                    await _pickImage(
-                                                      tutors[idx],
-                                                    );
-                                                    dev.log(
-                                                        'Picked: ${tutors[idx].imageData} $idx ${tutors.length}');
-                                                  },
-                                                  padding:
-                                                      const EdgeInsets.all(16),
-                                                  color: Pallete.buttonColor,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                      3,
-                                                    ),
-                                                  ),
-                                                  child: const Text(
-                                                    'Pick Image',
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      color: Colors.white,
-                                                    ),
+                                        ),
+                                        const Spacer(),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              MaterialButton(
+                                                onPressed: () async {
+                                                  dev.log(
+                                                      _imageData.toString());
+                                                  await _pickImage(
+                                                    tutors[idx],
+                                                  );
+                                                  dev.log(
+                                                      'Picked: ${tutors[idx].imageData} $idx ${tutors.length}');
+                                                },
+                                                padding:
+                                                    const EdgeInsets.all(16),
+                                                color: Pallete.buttonColor,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                    3,
                                                   ),
                                                 ),
-                                              ],
-                                            ),
+                                                child: const Text(
+                                                  'Pick Image',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 );

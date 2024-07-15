@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:tutor_x_tution_management/controllers/enum_controller.dart';
 import 'package:tutor_x_tution_management/controllers/filter_controller.dart';
+import 'package:tutor_x_tution_management/controllers/nav_option_index_controller.dart';
 import 'package:tutor_x_tution_management/controllers/statics_controller.dart';
 import 'package:tutor_x_tution_management/pages/auth.dart';
 import 'package:tutor_x_tution_management/routes/route.dart';
@@ -13,6 +14,7 @@ void main() async {
   await AuthService.fromFirebase().initializeApp();
   Get.put(UserStaticsController());
   Get.put(FilterController());
+  Get.put(NavIndexController());
   runApp(
     ChangeNotifierProvider(
       create: (context) => EnumController(),
@@ -26,8 +28,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('User logged in ${AuthService.fromFirebase().isLoggedIn()}');
-
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Tutor-X: Tution ManageMent',

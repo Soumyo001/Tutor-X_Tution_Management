@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:tutor_x_tution_management/data/enums.dart';
 import 'package:tutor_x_tution_management/models/student_post.dart';
+import 'package:tutor_x_tution_management/models/tutor_post.dart';
 
 class FilterController extends GetxController {
   final Rx<String?> _selectedValueArea = Rx<String?>(null);
@@ -8,15 +9,21 @@ class FilterController extends GetxController {
   final Rx<StudentTypes?> _studentTypes = Rx<StudentTypes?>(null);
   final Rx<SubjectTypes?> _subjectTypes = Rx<SubjectTypes?>(null);
   final RxList<StudentPost> _studentPosts = <StudentPost>[].obs;
+  final RxList<TutorPost> _tutorPosts = <TutorPost>[].obs;
 
   String? get selectedValueArea => _selectedValueArea.value;
   StudentMedium? get studentMedium => _studentMedium.value;
   StudentTypes? get studentTypes => _studentTypes.value;
   SubjectTypes? get subjectTypes => _subjectTypes.value;
   List<StudentPost> get studentPosts => _studentPosts;
+  List<TutorPost> get tutorPosts => _tutorPosts;
 
   set studentPosts(List<StudentPost> studentPosts) {
     _studentPosts.value = studentPosts;
+  }
+
+  set tutorPosts(List<TutorPost> tutorPosts) {
+    _tutorPosts.value = tutorPosts;
   }
 
   set selectedValueArea(String? selectedValueArea) {

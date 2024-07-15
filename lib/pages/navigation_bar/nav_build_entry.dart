@@ -3,13 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tutor_x_tution_management/components/nav_tile.dart';
-import 'package:tutor_x_tution_management/data/enums.dart';
+import 'package:tutor_x_tution_management/controllers/nav_option_index_controller.dart';
+
 import 'package:tutor_x_tution_management/data/nav_entry.dart';
 import 'package:tutor_x_tution_management/models/menu_model.dart';
 import 'package:tutor_x_tution_management/routes/route.dart';
 import 'package:tutor_x_tution_management/service/auth/auth_service.dart';
 import 'package:tutor_x_tution_management/utils/dialogs/logout_dialog.dart';
-import 'package:tutor_x_tution_management/controllers/statics_controller.dart';
+import 'dart:developer' as dev;
 
 typedef ItemTap = void Function()?;
 
@@ -21,78 +22,69 @@ class NavBuildEntry extends StatefulWidget {
 }
 
 class _NavBuildEntryState extends State<NavBuildEntry> {
-  late final UserStaticsController _userStaticsController;
+  late final NavIndexController _navIndexController;
 
   @override
   void initState() {
     super.initState();
-    _userStaticsController = Get.find<UserStaticsController>();
+    _navIndexController = Get.find<NavIndexController>();
   }
 
   @override
   Widget build(BuildContext context) {
     final menuData = NavEntry();
-    return Obx(
-      () => (_userStaticsController.userCategory == UserCategory.teacher
-          ? ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: menuData.navEntriesForTutor.length,
-              itemBuilder: (context, index) => navMenuEntry(
-                  index, menuData.navEntriesForTutor[index], context),
-            )
-          : ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: menuData.navEntriesForStudent.length,
-              itemBuilder: (context, index) => navMenuEntry(
-                  index, menuData.navEntriesForStudent[index], context),
-            )),
+    return ListView.builder(
+      shrinkWrap: true,
+      scrollDirection: Axis.horizontal,
+      itemCount: menuData.navEntries.length,
+      itemBuilder: (context, index) =>
+          navMenuEntry(index, menuData.navEntries[index], context),
     );
   }
 
   Widget navMenuEntry(int index, MenuModel menuModel, BuildContext context) {
-    final bool isSelected = WebRoutes.webNavigationBarIndex == index;
-    return NavigationTile(
-      text: menuModel.text,
-      onTap: () async {
-        switch (index) {
-          case 0:
-            Get.offNamed(WebRoutes.gatePage);
-            break;
-          case 1:
-            _userStaticsController.userCategory == UserCategory.teacher
-                ? Get.offNamed(WebRoutes.studentPage)
-                : Get.offNamed(WebRoutes.tutorsPage);
-            break;
-          case 2:
-            Get.offNamed(WebRoutes.tutionsPage);
-            break;
-          case 3:
-            Get.offNamed(WebRoutes.resourcePage);
-            break;
-          case 4:
-            Get.offNamed(WebRoutes.aboutPage);
-            break;
-          case 5:
-            final shouldLogout =
-                await showLogoutDialog(context, 'Do you want to logout ?');
-            if (shouldLogout) {
-              await AuthService.fromFirebase().logOut();
-              Get.offAllNamed(
-                WebRoutes.authPage,
-                predicate: (route) => false,
-              );
+    return Obx(
+      () {
+        final bool isSelected = _navIndexController.webNavIndex == index;
+        return NavigationTile(
+          text: menuModel.text,
+          onTap: () async {
+            switch (index) {
+              case 0:
+                Get.offNamed(WebRoutes.gatePage);
+                break;
+              case 1:
+                Get.offNamed(WebRoutes.tutorsPage);
+                break;
+              case 2:
+                Get.offNamed(WebRoutes.tutionsPage);
+                break;
+              case 3:
+                Get.offNamed(WebRoutes.resourcePage);
+                break;
+              case 4:
+                Get.offNamed(WebRoutes.aboutPage);
+                break;
+              case 5:
+                final shouldLogout =
+                    await showLogoutDialog(context, 'Do you want to logout ?');
+                if (shouldLogout) {
+                  await AuthService.fromFirebase().logOut();
+                  Get.offAllNamed(
+                    WebRoutes.authPage,
+                    predicate: (route) => false,
+                  );
+                }
+                break;
+              default:
+                break;
             }
-            break;
-          default:
-            break;
-        }
-        setState(() {
-          WebRoutes.webNavigationBarIndex = index;
-        });
+            await _navIndexController.saveNavigationIndex(index);
+            dev.log('${_navIndexController.webNavIndex.toString()}  $index');
+          },
+          isSelected: isSelected,
+        );
       },
-      isSelected: isSelected,
     );
   }
 }

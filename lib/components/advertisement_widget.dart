@@ -19,7 +19,7 @@ class _AdvertisementState extends State<Advertisement> {
   void _changeTips() async {
     int prevIdx = 0;
     try {
-      Timer.periodic(const Duration(minutes: 1), (timer) {
+      Timer.periodic(const Duration(seconds: 30), (timer) {
         final r = Random();
         int idx = r.nextInt(100) % Tips.tipsStudent.length;
         while (idx == prevIdx) {
