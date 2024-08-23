@@ -42,7 +42,7 @@ class _DashBoardState extends State<DashBoard> {
             },
           ),
           const Gap(10),
-          const RecentTutorPost(),
+          const RecentTutorPost(hasLimit: true),
           const Gap(20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 64.0),
@@ -64,7 +64,7 @@ class _DashBoardState extends State<DashBoard> {
             buttonText: 'View All',
           ),
           const Gap(20),
-          const RecentStudentPosts(),
+          const RecentStudentPosts(hasLimit: true),
         ],
       ),
     );

@@ -15,7 +15,7 @@ enum ProfessionType {
   unemployed
 }
 
-enum RequestStatus { accept, decline }
+enum RequestStatus { accept, pending, decline }
 
 enum SessionStatus { open, closed }
 

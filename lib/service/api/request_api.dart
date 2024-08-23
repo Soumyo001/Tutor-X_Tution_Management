@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:tutor_x_tution_management/data/enums.dart';
 import 'package:tutor_x_tution_management/models/request.dart';
 import 'package:tutor_x_tution_management/service/api/api_exceptions.dart';
 import 'package:tutor_x_tution_management/utils/api_constants.dart';
@@ -51,9 +52,11 @@ class RequestApi {
     return request;
   }
 
-  Future<List<Request>> getRequestByStudentId(int studentId) async {
+  Future<List<Request>> getRequestByUserIdFrom(int userId) async {
     List<Request> requests = [];
-    final uri = Uri.parse("$baseUrl/$requestRoute?$studentIdColumn=$studentId");
+    final uri =
+        Uri.parse("$baseUrl/$requestRoute?$requestuidFromColumn=$userId");
+
     try {
       final response = await http.get(
         uri,
@@ -71,9 +74,10 @@ class RequestApi {
     return requests;
   }
 
-  Future<List<Request>> getRequestByTutorId(int tutorId) async {
+  Future<List<Request>> getRequestByUserIdTo(int userId,
+      {bool friends = false}) async {
     List<Request> requests = [];
-    final uri = Uri.parse("$baseUrl/$requestRoute?$tutorIdColumn=$tutorId");
+    final uri = Uri.parse("$baseUrl/$requestRoute?$requestuidToColumn=$userId");
     try {
       final response = await http.get(
         uri,
@@ -82,6 +86,15 @@ class RequestApi {
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         final List<dynamic> jsonData = json.decode(response.body);
         requests = jsonData.map((e) => Request.fromJson(e)).toList();
+        if (friends) {
+          requests = requests
+              .where((e) => e.requestStatus == RequestStatus.accept)
+              .toList();
+        } else {
+          requests = requests
+              .where((e) => e.requestStatus == RequestStatus.pending)
+              .toList();
+        }
       }
     } on http.ClientException {
       throw ApiClientException();
@@ -91,11 +104,10 @@ class RequestApi {
     return requests;
   }
 
-  Future<List<Request>> getRequestByStudentAndTutorId(
-      int studentId, int tutorId) async {
+  Future<List<Request>> getRequestByBothParties(int uidFrom, int uidTo) async {
     List<Request> requests = [];
     final uri = Uri.parse(
-        "$baseUrl/$requestRoute?$studentIdColumn=$studentId&$tutorIdColumn=$tutorId");
+        "$baseUrl/$requestRoute?$requestuidFromColumn=$uidFrom&$requestuidToColumn=$uidTo");
     try {
       final response = await http.get(
         uri,

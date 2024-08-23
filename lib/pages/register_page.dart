@@ -5,7 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:tutor_x_tution_management/color_pallete.dart';
-import 'package:tutor_x_tution_management/components/registraion_user_categort.dart';
+import 'package:tutor_x_tution_management/components/registraion_user_category.dart';
 import 'package:tutor_x_tution_management/components/social_button.dart';
 import 'package:tutor_x_tution_management/controllers/enum_controller.dart';
 import 'package:tutor_x_tution_management/data/enums.dart';

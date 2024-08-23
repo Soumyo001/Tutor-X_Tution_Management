@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:tutor_x_tution_management/color_pallete.dart';
+import 'package:tutor_x_tution_management/data/enums.dart';
 import 'package:tutor_x_tution_management/pages/navigation_bar/nav_build_entry.dart';
 import 'package:tutor_x_tution_management/controllers/statics_controller.dart';
+import 'package:tutor_x_tution_management/routes/route.dart';
 
 class NavigationPanel extends StatefulWidget {
   const NavigationPanel({super.key});
@@ -92,7 +94,11 @@ class _NavigationPanelState extends State<NavigationPanel> {
                   onHover: (value) {
                     isProfileTapped.value = value;
                   },
-                  onTap: () {},
+                  onTap: () {
+                    _userStaticsController.userCategory == UserCategory.teacher
+                        ? Get.toNamed(WebRoutes.tutorProfilePage)
+                        : Get.toNamed(WebRoutes.studentProfilePage);
+                  },
                   splashColor: Colors.transparent,
                   hoverColor: Colors.transparent,
                   highlightColor: Colors.transparent,

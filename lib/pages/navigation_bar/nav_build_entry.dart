@@ -63,9 +63,12 @@ class _NavBuildEntryState extends State<NavBuildEntry> {
                 Get.offNamed(WebRoutes.resourcePage);
                 break;
               case 4:
-                Get.offNamed(WebRoutes.aboutPage);
+                Get.offNamed(WebRoutes.requestPage);
                 break;
               case 5:
+                Get.offNamed(WebRoutes.aboutPage);
+                break;
+              case 6:
                 final shouldLogout =
                     await showLogoutDialog(context, 'Do you want to logout ?');
                 if (shouldLogout) {

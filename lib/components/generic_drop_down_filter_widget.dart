@@ -6,13 +6,13 @@ import 'package:tutor_x_tution_management/controllers/filter_controller.dart';
 
 import 'package:tutor_x_tution_management/data/enums.dart';
 
-class GenericDropDown extends StatefulWidget {
+class GenericFilterDropDown extends StatefulWidget {
   final bool haveSearchBar;
   final List<String> items;
   final Rx<String?> selectedValue;
   final dynamic enumName;
 
-  const GenericDropDown({
+  const GenericFilterDropDown({
     super.key,
     required this.haveSearchBar,
     required this.items,
@@ -21,10 +21,10 @@ class GenericDropDown extends StatefulWidget {
   });
 
   @override
-  State<GenericDropDown> createState() => _GenericDropDownState();
+  State<GenericFilterDropDown> createState() => _GenericFilterDropDownState();
 }
 
-class _GenericDropDownState extends State<GenericDropDown> {
+class _GenericFilterDropDownState extends State<GenericFilterDropDown> {
   late final TextEditingController _areaEditingController;
   late final FilterController _filterController;
   late final List<String> _options;

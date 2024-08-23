@@ -8,11 +8,13 @@ import 'package:tutor_x_tution_management/components/tutor_display_widget.dart';
 import 'package:tutor_x_tution_management/controllers/filter_controller.dart';
 import 'package:tutor_x_tution_management/models/tutor.dart';
 import 'package:tutor_x_tution_management/models/tutor_post.dart';
+import 'package:tutor_x_tution_management/routes/route.dart';
 import 'package:tutor_x_tution_management/service/api/tutor_api.dart';
 import 'package:tutor_x_tution_management/service/api/tutor_post_api.dart';
 
 class RecentTutorPost extends StatefulWidget {
-  const RecentTutorPost({super.key});
+  final bool hasLimit;
+  const RecentTutorPost({super.key, required this.hasLimit});
 
   @override
   State<RecentTutorPost> createState() => _RecentTutorPostState();
@@ -57,9 +59,19 @@ class _RecentTutorPostState extends State<RecentTutorPost> {
                       scrollDirection: Axis.vertical,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: screenSize.width < 800 ? 2 : 3),
-                      itemCount: _filterController.tutorPosts.length,
+                      itemCount: widget.hasLimit
+                          ? _filterController.tutorPosts.length >= 3
+                              ? 3
+                              : _filterController.tutorPosts.length
+                          : _filterController.tutorPosts.length,
                       itemBuilder: (context, index) {
-                        final tutorPost = _filterController.tutorPosts[index];
+                        final tutorPost = _filterController.tutorPosts[widget
+                                .hasLimit
+                            ? _filterController.tutorPosts.length >= 3
+                                ? (index +
+                                    (_filterController.tutorPosts.length - 3))
+                                : index
+                            : index];
                         return FutureBuilder(
                           future: TutorApi().getTutorById(tutorPost.tutorId),
                           builder: (context, snapshot) {
@@ -128,7 +140,14 @@ class _RecentTutorPostState extends State<RecentTutorPost> {
                                               MainAxisAlignment.end,
                                           children: [
                                             MaterialButton(
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                Get.toNamed(
+                                                  WebRoutes.postView,
+                                                  arguments: {
+                                                    "tutor_post": tutorPost
+                                                  },
+                                                );
+                                              },
                                               padding: const EdgeInsets.all(16),
                                               color: Pallete.buttonColor,
                                               shape: RoundedRectangleBorder(

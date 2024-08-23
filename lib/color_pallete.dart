@@ -6,6 +6,7 @@ class Pallete {
   static const Color gradiant2 = Color.fromARGB(255, 58, 12, 163);
   static const Color gradiant3 = Color.fromARGB(255, 67, 97, 238);
   static const Color gradiant4 = Color.fromARGB(255, 76, 201, 240);
+  static const Color requestColor = Color.fromARGB(255, 196, 212, 224);
   static Color textColor = Colors.grey.shade700;
   static const Color gradiant5 = Color.fromARGB(255, 241, 148, 180);
   static const Color gradiant6 = Color.fromARGB(255, 255, 235, 198);

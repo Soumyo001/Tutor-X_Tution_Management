@@ -5,10 +5,12 @@ import 'package:tutor_x_tution_management/color_pallete.dart';
 import 'package:tutor_x_tution_management/components/tutor_display_widget.dart';
 import 'package:tutor_x_tution_management/controllers/filter_controller.dart';
 import 'package:tutor_x_tution_management/models/student_post.dart';
+import 'package:tutor_x_tution_management/routes/route.dart';
 import 'package:tutor_x_tution_management/service/api/student_post_api.dart';
 
 class RecentStudentPosts extends StatefulWidget {
-  const RecentStudentPosts({super.key});
+  final bool hasLimit;
+  const RecentStudentPosts({super.key, required this.hasLimit});
 
   @override
   State<RecentStudentPosts> createState() => _RecentStudentPostsState();
@@ -55,10 +57,20 @@ class _RecentStudentPostsState extends State<RecentStudentPosts> {
                       scrollDirection: Axis.vertical,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: screenSize.width < 800 ? 2 : 3),
-                      itemCount: _filterController.studentPosts.length,
+                      itemCount: widget.hasLimit
+                          ? _filterController.studentPosts.length >= 3
+                              ? 3
+                              : _filterController.studentPosts.length
+                          : _filterController.studentPosts.length,
                       itemBuilder: (context, index) {
-                        final studentPost =
-                            _filterController.studentPosts[index];
+                        final studentPost = _filterController.studentPosts[
+                            widget.hasLimit
+                                ? _filterController.studentPosts.length >= 3
+                                    ? (index +
+                                        (_filterController.studentPosts.length -
+                                            3))
+                                    : index
+                                : index];
                         return Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Container(
@@ -171,7 +183,14 @@ class _RecentStudentPostsState extends State<RecentStudentPosts> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       MaterialButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Get.toNamed(
+                                            WebRoutes.postView,
+                                            arguments: {
+                                              "student_post": studentPost
+                                            },
+                                          );
+                                        },
                                         padding: const EdgeInsets.all(16),
                                         color: Pallete.buttonColor,
                                         shape: RoundedRectangleBorder(

@@ -26,22 +26,38 @@ class _PreInfoPageState extends State<PreInfoPage> {
     if (currentUser != null) {
       final user = await UserApi().getUserByEmail(currentUser.email!);
       if (user.isNotEmpty) {
+        _userStaticsController.userId = user.first.userId;
         _userStaticsController.userCategory = user.first.userType;
         _userStaticsController.userName = user.first.fullName;
         _userStaticsController.userEmail = user.first.email;
         _userStaticsController.userEducation = user.first.education;
-        _userStaticsController.userEducation = user.first.location;
+        _userStaticsController.userLocation = user.first.location;
         _userStaticsController.userPhoneNumber = user.first.phoneNumber;
         dev.log('MESSEGE: Inside User Data');
         switch (user.first.userType) {
           case UserCategory.teacher:
-            final teacher =
-                await TutorApi().getTutorByUserId(user.first.userId);
-            if (teacher.isNotEmpty) {
-              dev.log('MESSEGE: Inside teacher : ${teacher.first.imageData}');
-              if (teacher.first.imageData != null) {
+            final t = await TutorApi().getTutorByUserId(user.first.userId);
+
+            if (t.isNotEmpty) {
+              final teacher = t.first;
+              dev.log('MESSEGE: Inside teacher : ${teacher.imageData}');
+              _userStaticsController.tutor = teacher;
+              _userStaticsController.tutorSalary = teacher.expectedSalary;
+              _userStaticsController.tutorAvailabilityStatus = teacher.status;
+              _userStaticsController.tutorProfessionType = teacher.profession;
+              _userStaticsController.tutorSelfDesc =
+                  teacher.tutorSelfDescription;
+              _userStaticsController.tutorStudentMedium =
+                  teacher.mediumOfInterest;
+              _userStaticsController.tutorStudentType = teacher.expectedStudent;
+              _userStaticsController.tutorSubjectType =
+                  teacher.subjectOfInterest;
+              _userStaticsController.tutorVerificationStatus =
+                  teacher.verificationStatus;
+
+              if (teacher.imageData != null) {
                 _userStaticsController.imageData =
-                    base64Decode(teacher.first.imageData!);
+                    base64Decode(teacher.imageData!);
                 dev.log(
                     'MESSEGE: Inside teacher image data : ${Get.find<UserStaticsController>().imageData}');
               }
@@ -51,8 +67,13 @@ class _PreInfoPageState extends State<PreInfoPage> {
             final student =
                 await StudentApi().getStudentByUserId(user.first.userId);
             if (student.isNotEmpty) {
-              dev.log('MESSEGE: Inside student : ${student.first.imageData}');
-              if (student.first.imageData != null) {
+              final s = student.first;
+              dev.log('MESSEGE: Inside student : ${s.imageData}');
+              _userStaticsController.student = s;
+              _userStaticsController.studentMedium = s.studentMedium;
+              _userStaticsController.studentSelfDesc = s.studentSelfDescription;
+
+              if (s.imageData != null) {
                 _userStaticsController.imageData =
                     base64Decode(student.first.imageData!);
                 dev.log(

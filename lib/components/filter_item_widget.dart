@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:tutor_x_tution_management/components/generic_drop_down_widget.dart';
+import 'package:tutor_x_tution_management/components/generic_drop_down_filter_widget.dart';
 
 class FilterItem extends StatelessWidget {
   final String filterOptionName;
@@ -32,7 +32,7 @@ class FilterItem extends StatelessWidget {
           ),
         ),
         const Gap(10),
-        GenericDropDown(
+        GenericFilterDropDown(
           haveSearchBar: haveSearchBar,
           items: items,
           selectedValue: selectedValue,

@@ -18,6 +18,7 @@ class StudentPost {
   String fullName;
   TutionDays days;
   String location;
+  String studentDes;
   String education;
   StudentMedium studentMedium;
   StudentTypes studentTypes;
@@ -30,6 +31,7 @@ class StudentPost {
     required this.fullName,
     required this.days,
     required this.location,
+    required this.studentDes,
     required this.education,
     required this.studentMedium,
     required this.studentTypes,
@@ -43,6 +45,7 @@ class StudentPost {
         fullName: json[studentPostFullNameColumn] as String,
         days: TutionDays.values[json[studentPostTutionDaysColumn] as int],
         location: json[studentPostLocationColumn] as String,
+        studentDes: json[studentPostDescriptionColumn] as String,
         education: json[studentPostEducationColumn] as String,
         studentMedium:
             StudentMedium.values[json[studentPostStudentMediumColumn] as int],
@@ -59,6 +62,7 @@ class StudentPost {
         studentPostFullNameColumn: fullName,
         studentPostTutionDaysColumn: days.index,
         studentPostLocationColumn: location,
+        studentPostDescriptionColumn: studentDes,
         studentPostEducationColumn: education,
         studentPostStudentMediumColumn: studentMedium.index,
         studentPostStudentTypesColumn: studentTypes.index,

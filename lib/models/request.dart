@@ -4,16 +4,16 @@ import 'package:tutor_x_tution_management/utils/constants.dart';
 
 class Request {
   late int requestId;
-  late int studentId;
-  late int tutorId;
+  late int uidFrom;
+  late int uidTo;
   late String requestDate;
   late bool isFromTutor;
   late RequestStatus requestStatus;
 
   Request({
     required this.requestId,
-    required this.studentId,
-    required this.tutorId,
+    required this.uidFrom,
+    required this.uidTo,
     required this.requestDate,
     required this.isFromTutor,
     required this.requestStatus,
@@ -21,19 +21,19 @@ class Request {
 
   Request.fromJson(Map<String, Object?> json) {
     requestId = json[requestIdColumn] as int;
-    studentId = json[studentIdColumn] as int;
-    tutorId = json[tutorIdColumn] as int;
+    uidFrom = json[requestuidFromColumn] as int;
+    uidTo = json[requestuidToColumn] as int;
     requestDate = json[requestDateColumn] as String;
     isFromTutor = json[isrequestFromTutorColumn] as bool;
-    requestStatus = json[requestStatusColumn] as RequestStatus;
+    requestStatus = RequestStatus.values[json[requestStatusColumn] as int];
   }
 
   Map<String, Object?> toJson() => {
         requestIdColumn: requestId,
-        studentIdColumn: studentId,
-        tutorIdColumn: tutorId,
+        requestuidFromColumn: uidFrom,
+        requestuidToColumn: uidTo,
         requestDateColumn: requestDate,
         isrequestFromTutorColumn: isFromTutor,
-        requestStatusColumn: requestStatus,
+        requestStatusColumn: requestStatus.index,
       };
 }

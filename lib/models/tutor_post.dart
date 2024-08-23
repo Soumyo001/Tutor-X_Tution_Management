@@ -17,6 +17,7 @@ class TutorPost {
   String fullName;
   String bio;
   String location;
+  String tutorDes;
   SubjectTypes subjectOfInterest;
   StudentMedium studentMedium;
   StudentTypes expectedStudent;
@@ -27,6 +28,7 @@ class TutorPost {
     required this.fullName,
     required this.bio,
     required this.location,
+    required this.tutorDes,
     required this.subjectOfInterest,
     required this.studentMedium,
     required this.expectedStudent,
@@ -38,6 +40,7 @@ class TutorPost {
         fullName: json[tutorPostFullNameColumn] as String,
         bio: json[tutorPostBioColumn] as String,
         location: json[tutorPostLocationColumn] as String,
+        tutorDes: json[tutorPostDescriptionColumn] as String,
         subjectOfInterest:
             SubjectTypes.values[json[tutorPostSubjectOfInterestColumn] as int],
         studentMedium:
@@ -52,6 +55,7 @@ class TutorPost {
         tutorPostFullNameColumn: fullName,
         tutorPostBioColumn: bio,
         tutorPostLocationColumn: location,
+        tutorPostDescriptionColumn: tutorDes,
         tutorPostSubjectOfInterestColumn: subjectOfInterest.index,
         tutorPostStudentMediumColumn: studentMedium.index,
         tutorPostExpectedStudentColumn: expectedStudent.index,

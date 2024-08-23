@@ -54,7 +54,8 @@ class _TutionsPageState extends State<TutionsPage> {
             child: ScrollTransformView(
               children: [
                 ScrollTransformItem(
-                  builder: (scrollOffset) => const RecentStudentPosts(),
+                  builder: (scrollOffset) =>
+                      const RecentStudentPosts(hasLimit: false),
                 ),
               ],
             ),
