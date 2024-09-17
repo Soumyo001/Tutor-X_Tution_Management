@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tutor_x_tution_management/color_pallete.dart';
+import 'package:tutor_x_tution_management/utils/color_pallete.dart';
 
 class LogSignButton extends StatelessWidget {
   final String text;

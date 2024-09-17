@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tutor_x_tution_management/color_pallete.dart';
+import 'package:tutor_x_tution_management/utils/color_pallete.dart';
 import 'package:tutor_x_tution_management/controllers/enum_controller.dart';
 import 'package:tutor_x_tution_management/data/enums.dart';
 

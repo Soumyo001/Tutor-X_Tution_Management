@@ -1,5 +1,5 @@
 import 'package:flutter/Material.dart';
-import 'package:tutor_x_tution_management/color_pallete.dart';
+import 'package:tutor_x_tution_management/utils/color_pallete.dart';
 
 class JustIcon extends StatelessWidget {
   final IconData icon;

@@ -6,6 +6,7 @@ import 'package:tutor_x_tution_management/controllers/filter_controller.dart';
 import 'package:tutor_x_tution_management/controllers/nav_option_index_controller.dart';
 import 'package:tutor_x_tution_management/controllers/report_controller.dart';
 import 'package:tutor_x_tution_management/controllers/request_controller.dart';
+import 'package:tutor_x_tution_management/controllers/resource_controller.dart';
 import 'package:tutor_x_tution_management/controllers/statics_controller.dart';
 import 'package:tutor_x_tution_management/controllers/user_friends_controller.dart';
 import 'package:tutor_x_tution_management/controllers/user_post_controller.dart';
@@ -23,6 +24,7 @@ void main() async {
   Get.put(UserFriendsController());
   Get.put(UserPostController());
   Get.put(ReportController());
+  Get.put(ResourceController());
   runApp(
     ChangeNotifierProvider(
       create: (context) => EnumController(),

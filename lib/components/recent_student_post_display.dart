@@ -1,7 +1,7 @@
 import 'package:flutter/Material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:tutor_x_tution_management/color_pallete.dart';
+import 'package:tutor_x_tution_management/utils/color_pallete.dart';
 import 'package:tutor_x_tution_management/components/tutor_display_widget.dart';
 import 'package:tutor_x_tution_management/controllers/filter_controller.dart';
 import 'package:tutor_x_tution_management/models/student_post.dart';

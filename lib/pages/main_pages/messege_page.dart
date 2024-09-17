@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/Material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:tutor_x_tution_management/color_pallete.dart';
+import 'package:tutor_x_tution_management/utils/color_pallete.dart';
 import 'package:tutor_x_tution_management/components/chat_bubble.dart';
 import 'package:tutor_x_tution_management/components/input_box2.dart';
 import 'package:tutor_x_tution_management/components/just_icon.dart';

@@ -4,7 +4,7 @@ import 'package:flutter/Material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tutor_x_tution_management/color_pallete.dart';
+import 'package:tutor_x_tution_management/utils/color_pallete.dart';
 import 'package:tutor_x_tution_management/components/tutor_display_widget.dart';
 import 'package:tutor_x_tution_management/models/tutor.dart';
 import 'package:tutor_x_tution_management/models/user.dart';

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/Material.dart';
 import 'package:gap/gap.dart';
-import 'package:tutor_x_tution_management/color_pallete.dart';
+import 'package:tutor_x_tution_management/utils/color_pallete.dart';
 import 'package:tutor_x_tution_management/components/just_icon.dart';
 import 'package:tutor_x_tution_management/components/tutor_profile_extra_info.dart';
 
