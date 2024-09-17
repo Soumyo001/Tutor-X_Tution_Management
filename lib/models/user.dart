@@ -9,6 +9,7 @@ class User {
   late String password;
   late String education;
   late String location;
+  late int userReports;
   late UserCategory userType;
 
   User({
@@ -20,6 +21,7 @@ class User {
     required this.education,
     required this.location,
     required this.userType,
+    required this.userReports,
   });
 
   User.fromJson(Map<String, Object?> json) {
@@ -30,6 +32,7 @@ class User {
     password = json[userPasswordColumn] as String;
     education = json[userEducationColumn] as String;
     location = json[userLocationColumn] as String;
+    userReports = json[userReportsColumn] as int;
     userType = UserCategory.values[json[userTypeColumn] as int];
   }
 
@@ -41,6 +44,7 @@ class User {
         userPasswordColumn: password,
         userEducationColumn: education,
         userLocationColumn: location,
+        userReportsColumn: userReports,
         userTypeColumn: userType.index,
       };
 }

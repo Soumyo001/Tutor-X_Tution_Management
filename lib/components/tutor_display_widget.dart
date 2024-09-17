@@ -5,18 +5,20 @@ class TutorDisplayWidget extends StatelessWidget {
   final FontWeight fontWeight;
   final double? fontSize;
   final Color fontColor;
+  final double maxWidth;
   const TutorDisplayWidget({
     super.key,
     required this.text,
     this.fontWeight = FontWeight.w500,
     this.fontSize = 13,
     this.fontColor = Colors.black,
+    this.maxWidth = 270,
   });
 
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 270),
+      constraints: BoxConstraints(maxWidth: maxWidth),
       child: Text(
         text,
         maxLines: 2,

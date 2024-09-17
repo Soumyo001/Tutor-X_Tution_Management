@@ -52,7 +52,8 @@ class RequestApi {
     return request;
   }
 
-  Future<List<Request>> getRequestByUserIdFrom(int userId) async {
+  Future<List<Request>> getRequestByUserIdFrom(int userId,
+      {bool friends = false}) async {
     List<Request> requests = [];
     final uri =
         Uri.parse("$baseUrl/$requestRoute?$requestuidFromColumn=$userId");
@@ -65,6 +66,11 @@ class RequestApi {
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         final List<dynamic> jsonData = json.decode(response.body);
         requests = jsonData.map((e) => Request.fromJson(e)).toList();
+        if (friends) {
+          requests = requests
+              .where((element) => element.requestStatus == RequestStatus.accept)
+              .toList();
+        }
       }
     } on http.ClientException {
       throw ApiClientException();
@@ -101,6 +107,13 @@ class RequestApi {
     } catch (e) {
       throw ApiGenericException(code: e.toString());
     }
+    return requests;
+  }
+
+  Future<List<Request>> getUserFriends(int uid, {required bool friends}) async {
+    List<Request> requests = [];
+    requests = (await getRequestByUserIdFrom(uid, friends: friends));
+    requests.addAll((await getRequestByUserIdTo(uid, friends: friends)));
     return requests;
   }
 

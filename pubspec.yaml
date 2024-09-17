@@ -49,6 +49,7 @@ dependencies:
   responsive_builder: ^0.7.1
   dropdown_button2: ^2.3.9
   shared_preferences: ^2.2.3
+  cloud_firestore: ^5.4.0
 
 dev_dependencies:
   flutter_test:

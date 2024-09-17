@@ -3,19 +3,25 @@
 import 'dart:convert';
 
 import 'package:flutter/Material.dart';
+import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:tutor_x_tution_management/components/icon_button.dart';
+import 'package:tutor_x_tution_management/components/input_box2.dart';
 import 'package:tutor_x_tution_management/components/tutor_profile_info.dart';
 import 'package:tutor_x_tution_management/controllers/statics_controller.dart';
 import 'package:tutor_x_tution_management/data/enums.dart';
+import 'package:tutor_x_tution_management/models/report.dart';
 import 'package:tutor_x_tution_management/models/request.dart';
 import 'package:tutor_x_tution_management/models/tutor.dart';
 import 'package:tutor_x_tution_management/models/user.dart';
+import 'package:tutor_x_tution_management/routes/route.dart';
+import 'package:tutor_x_tution_management/service/api/report_api.dart';
 import 'package:tutor_x_tution_management/service/api/request_api.dart';
 import 'package:tutor_x_tution_management/utils/dialogs/assuring_dialog.dart';
 import 'package:tutor_x_tution_management/utils/dialogs/confirmation_dialog.dart';
 import 'package:tutor_x_tution_management/utils/dialogs/error_dialog.dart';
+import 'package:tutor_x_tution_management/utils/dialogs/success_dialog.dart';
 
 class OtherTutorProfileViewPartLeft extends StatefulWidget {
   final User user;
@@ -31,6 +37,7 @@ class OtherTutorProfileViewPartLeft extends StatefulWidget {
 class _OtherTutorProfileViewPartLeftState
     extends State<OtherTutorProfileViewPartLeft> {
   late final UserStaticsController _userStaticsController;
+  late final TextEditingController _contController;
   final RxBool reqSent = false.obs;
   final RxBool reqConfirmation = false.obs;
   final RxBool reqConfirmed = false.obs;
@@ -39,6 +46,7 @@ class _OtherTutorProfileViewPartLeftState
   void initState() {
     super.initState();
     _userStaticsController = Get.find<UserStaticsController>();
+    _contController = TextEditingController();
   }
 
   @override
@@ -146,7 +154,15 @@ class _OtherTutorProfileViewPartLeftState
                 ButtonIcon(
                   label: 'Messege',
                   icon: Icons.message,
-                  onPressed: () {},
+                  onPressed: () async {
+                    Get.toNamed(
+                      WebRoutes.messege,
+                      arguments: {
+                        'user': widget.user,
+                        'tutor': widget.tutor,
+                      },
+                    );
+                  },
                   enableIcon: true,
                   loading: false,
                 ),
@@ -289,6 +305,100 @@ class _OtherTutorProfileViewPartLeftState
                     enableIcon: true,
                     loading: false,
                   ),
+                ),
+                ButtonIcon(
+                  label: 'Report',
+                  icon: Icons.report,
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.report,
+                                    size: 30,
+                                  ),
+                                  Gap(5),
+                                  Text(
+                                    'Report',
+                                    style: TextStyle(fontSize: 28),
+                                  ),
+                                ],
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.close),
+                                splashRadius: 25,
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          ),
+                          content: SizedBox(
+                            width: screenSize.width * 0.4,
+                            height: screenSize.height * 0.25,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                InputBox2(
+                                  hintText: 'Content',
+                                  controller: _contController,
+                                  alternativeColor: true,
+                                  disableMaxLengthAndLines: false,
+                                  maxLength: null,
+                                  maxLines: 5,
+                                ),
+                                const Gap(15),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    ButtonIcon(
+                                      icon: Icons.send,
+                                      onPressed: () async {
+                                        final report = Report(
+                                          reportId: 0,
+                                          uidFrom:
+                                              _userStaticsController.userId,
+                                          uidTo: widget.user.userId,
+                                          reportText: _contController.text,
+                                          reportDate: DateTime.now().toString(),
+                                        );
+                                        final response =
+                                            await ReportApi().postReport(
+                                          requestBody: report.toJson(),
+                                        );
+                                        if (response.statusCode >= 200 &&
+                                            response.statusCode <= 299) {
+                                          Navigator.of(context).pop();
+                                          await showSuccessDialog(context,
+                                              'Successfully Submitted');
+                                        } else {
+                                          await showErrorDialog(
+                                              context, 'Something went wrong');
+                                        }
+                                      },
+                                      enableIcon: true,
+                                      loading: false,
+                                      label: 'Submit',
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  enableIcon: true,
+                  loading: false,
                 ),
               ],
             ),

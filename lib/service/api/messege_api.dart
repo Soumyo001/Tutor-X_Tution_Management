@@ -31,7 +31,7 @@ class MessegeApi {
     return messeges;
   }
 
-  Future<Messege?> getMessegewById(int messegeId) async {
+  Future<Messege?> getMessegeById(int messegeId) async {
     late Messege? messege;
     final uri = Uri.parse("$baseUrl/$messegesRoute/$messegeId");
     try {
@@ -51,10 +51,10 @@ class MessegeApi {
     return messege;
   }
 
-  Future<List<Messege>> getMessegeByStudentId(int studentId) async {
+  Future<List<Messege>> getMessegeByUidFrom(int uidFrom) async {
     List<Messege> messeges = [];
     final uri =
-        Uri.parse("$baseUrl/$messegesRoute?$studentIdColumn=$studentId");
+        Uri.parse("$baseUrl/$messegesRoute?$messegeUidFromColumn=$uidFrom");
     try {
       final response = await http.get(
         uri,
@@ -72,9 +72,9 @@ class MessegeApi {
     return messeges;
   }
 
-  Future<List<Messege>> getMessegeByTutorId(int tutorId) async {
+  Future<List<Messege>> getMessegeByUidTo(int uidTo) async {
     List<Messege> messeges = [];
-    final uri = Uri.parse("$baseUrl/$messegesRoute?$tutorIdColumn=$tutorId");
+    final uri = Uri.parse("$baseUrl/$messegesRoute?$messegeUidToColumn=$uidTo");
     try {
       final response = await http.get(
         uri,
@@ -92,11 +92,10 @@ class MessegeApi {
     return messeges;
   }
 
-  Future<List<Messege>> getMessegeByStudentAndTutorId(
-      int studentId, int tutorId) async {
+  Future<List<Messege>> getMessegeByBothParties(int uidFrom, int uidTo) async {
     List<Messege> messeges = [];
     final uri = Uri.parse(
-        "$baseUrl/$messegesRoute?$studentIdColumn=$studentId&$tutorIdColumn=$tutorId");
+        "$baseUrl/$messegesRoute?$messegeUidFromColumn=$uidFrom&$messegeUidToColumn=$uidTo");
     try {
       final response = await http.get(
         uri,

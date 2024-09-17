@@ -36,7 +36,8 @@ class _RecentTutorPostState extends State<RecentTutorPost> {
       height: 0.45 * screenSize.height,
       width: screenSize.width * 0.5,
       child: FutureBuilder(
-        future: TutorPostApi().getTutorPostsByFilter(null, null, null, null),
+        future:
+            TutorPostApi().getTutorPostsByFilter(null, null, null, null, null),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             WidgetsBinding.instance.addPostFrameCallback((_) {

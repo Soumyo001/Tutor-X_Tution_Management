@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tutor_x_tution_management/controllers/report_controller.dart';
 import 'package:tutor_x_tution_management/data/enums.dart';
 import 'package:tutor_x_tution_management/pages/main_pages/home_page.dart';
+import 'package:tutor_x_tution_management/service/api/report_api.dart';
 import 'package:tutor_x_tution_management/service/api/student_api.dart';
 import 'package:tutor_x_tution_management/service/api/tutor_api.dart';
 import 'package:tutor_x_tution_management/service/api/user_api.dart';
@@ -20,11 +22,30 @@ class PreInfoPage extends StatefulWidget {
 
 class _PreInfoPageState extends State<PreInfoPage> {
   late final UserStaticsController _userStaticsController;
+  late final ReportController _reportController;
 
   Future<void> getUserData() async {
     final currentUser = AuthService.fromFirebase().currentUser;
     if (currentUser != null) {
       final user = await UserApi().getUserByEmail(currentUser.email!);
+      await _reportController.loadReportCount(user.first.userId);
+      final report = await ReportApi().getReportByUidTo(user.first.userId);
+
+      user.first.userReports = report.length;
+      await UserApi()
+          .updateUser(userId: user.first.userId, body: user.first.toJson());
+
+      if (_reportController.reportCount < report.length) {
+        _reportController.reportCount = report.length;
+        _reportController.hasReported = false;
+
+        await _reportController.saveReportCount(
+          _reportController.reportCount,
+          _reportController.hasReported,
+          user.first.userId,
+        );
+      }
+
       if (user.isNotEmpty) {
         _userStaticsController.userId = user.first.userId;
         _userStaticsController.userCategory = user.first.userType;
@@ -33,6 +54,7 @@ class _PreInfoPageState extends State<PreInfoPage> {
         _userStaticsController.userEducation = user.first.education;
         _userStaticsController.userLocation = user.first.location;
         _userStaticsController.userPhoneNumber = user.first.phoneNumber;
+        _userStaticsController.userReports = user.first.userReports;
         dev.log('MESSEGE: Inside User Data');
         switch (user.first.userType) {
           case UserCategory.teacher:
@@ -94,6 +116,7 @@ class _PreInfoPageState extends State<PreInfoPage> {
   void initState() {
     super.initState();
     _userStaticsController = Get.find<UserStaticsController>();
+    _reportController = Get.find<ReportController>();
   }
 
   @override

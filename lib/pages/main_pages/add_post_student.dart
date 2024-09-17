@@ -115,7 +115,8 @@ class _AddPostByStudentState extends State<AddPostByStudent> {
                           onPressed: () async {
                             int? salary = int.tryParse(_salary.text);
                             if (salary == null) {
-                              await showErrorDialog(context, 'Invalid Input');
+                              await showErrorDialog(
+                                  context, 'Invalid Input in Salary tab');
                             } else {
                               final studentPost = StudentPost(
                                 studentPostId: 0,

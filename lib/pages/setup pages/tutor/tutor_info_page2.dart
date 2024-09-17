@@ -97,6 +97,7 @@ class _TutorInfo2State extends State<TutorInfo2> {
                     password: widget.password,
                     education: widget.educationController.text,
                     location: widget.locationController.text,
+                    userReports: 0,
                     userType: e.userCategory,
                   );
                   final responseUser =

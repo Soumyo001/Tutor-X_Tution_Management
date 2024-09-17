@@ -1,7 +1,6 @@
 import 'package:flutter/Material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:responsive_builder/responsive_builder.dart';
 import 'package:tutor_x_tution_management/components/filtering.dart';
 import 'package:tutor_x_tution_management/components/recent_student_post_display.dart';
 import 'package:tutor_x_tution_management/controllers/filter_controller.dart';
@@ -41,6 +40,7 @@ class _TutionsPageState extends State<TutionsPage> {
             onFilter: () async {
               final studentPosts =
                   await StudentPostApi().getStudentPostsByFilter(
+                null,
                 _filterController.selectedValueArea,
                 _filterController.studentMedium?.index,
                 _filterController.studentTypes?.index,
@@ -50,15 +50,8 @@ class _TutionsPageState extends State<TutionsPage> {
             },
           ),
           const Gap(10),
-          Expanded(
-            child: ScrollTransformView(
-              children: [
-                ScrollTransformItem(
-                  builder: (scrollOffset) =>
-                      const RecentStudentPosts(hasLimit: false),
-                ),
-              ],
-            ),
+          const Expanded(
+            child: RecentStudentPosts(hasLimit: false),
           ),
         ],
       ),

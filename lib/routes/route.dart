@@ -4,6 +4,7 @@ import 'package:tutor_x_tution_management/pages/auth.dart';
 import 'package:tutor_x_tution_management/pages/main_pages/about_page.dart';
 import 'package:tutor_x_tution_management/pages/main_pages/add_post_student.dart';
 import 'package:tutor_x_tution_management/pages/main_pages/add_post_tutor.dart';
+import 'package:tutor_x_tution_management/pages/main_pages/messege_page.dart';
 import 'package:tutor_x_tution_management/pages/main_pages/other_student_profile_page.dart';
 import 'package:tutor_x_tution_management/pages/main_pages/others_tutor_profile_page.dart';
 import 'package:tutor_x_tution_management/pages/main_pages/user_friends.dart';
@@ -39,11 +40,17 @@ class WebRoutes {
   static const otherTutorProfilePage = '/tutor/profile';
   static const otherStudentProfilePage = '/student/profile';
   static const authPage = '/OAuthenticatior';
+  static const messege = '/messege';
   static final List<GetPage> routes = [
     GetPage(
       name: authPage,
       page: () => const Auth(),
       transition: Transition.noTransition,
+    ),
+    GetPage(
+      name: messege,
+      page: () => const MessegePage(),
+      transition: Transition.native,
     ),
     GetPage(
       name: otherTutorProfilePage,

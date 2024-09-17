@@ -7,6 +7,7 @@ const userPasswordColumn = 'password';
 const userEducationColumn = 'education';
 const userLocationColumn = 'location';
 const userTypeColumn = 'type';
+const userReportsColumn = 'userReports';
 const userResourceListColumn = 'resources';
 
 //tutor
@@ -74,6 +75,8 @@ const requestTutorColumn = 'tutor';
 
 //report
 const reportIdColumn = 'reportId';
+const reportUidFromColumn = 'uidFrom';
+const reportUidToColumn = 'uidTo';
 const reportTextColumn = 'reportText';
 const reportDateColumn = 'reportDate';
 const reportStudentColumn = 'student';
@@ -82,9 +85,9 @@ const reportTutorColumn = 'tutor';
 //messege
 const messegeIdColumn = 'messegeId';
 const messegeTextColumn = 'messegeText';
+const messegeUidFromColumn = 'uidFrom';
+const messegeUidToColumn = 'uidTo';
 const messegeTimeStampColumn = 'timeStamp';
-const messegeStudentColumn = 'student';
-const messegeTutorColumn = 'tutor';
 
 //background_checks
 const backgroundCheckIdColumn = 'checkId';
@@ -121,3 +124,6 @@ const tutorPostDescriptionColumn = 'description';
 const tutorPostSubjectOfInterestColumn = 'subjectTypes';
 const tutorPostStudentMediumColumn = 'studentMedium';
 const tutorPostExpectedStudentColumn = 'studentTypes';
+
+const fireStoreMessegeTableName = 'chat_rooms';
+const fireStoreMessegeSubTableName = 'messege';

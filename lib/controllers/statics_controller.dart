@@ -14,6 +14,7 @@ class UserStaticsController extends GetxController {
   final RxString _userPhoneNumber = "".obs;
   final RxString _tutorSelfDesc = "".obs;
   final RxInt _tutorSalary = 0.obs;
+  final RxInt _userReports = 0.obs;
   final Rx<Uint8List?> _imageData = Rx<Uint8List?>(null);
   final _userCategory = UserCategory.student.obs;
   final _tutorProfessionType = ProfessionType.student.obs;
@@ -29,6 +30,7 @@ class UserStaticsController extends GetxController {
   final Rx<Student?> _student = Rx<Student?>(null);
 
   int get userId => _userId.value;
+  int get userReports => _userReports.value;
   String get userName => _userName.value;
   String get userEmail => _userEmail.value;
   String get userEducation => _userEducation.value;
@@ -53,6 +55,10 @@ class UserStaticsController extends GetxController {
 
   set userName(String userName) {
     _userName.value = userName;
+  }
+
+  set userReports(int userReports) {
+    _userReports.value = userReports;
   }
 
   set studentSelfDesc(String studentSelfDesc) {

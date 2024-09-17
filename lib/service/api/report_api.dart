@@ -51,9 +51,10 @@ class ReportApi {
     return report;
   }
 
-  Future<List<Report>> getReportByStudentId(int studentId) async {
+  Future<List<Report>> getReportByUidFrom(int uidFrom) async {
     List<Report> reports = [];
-    final uri = Uri.parse("$baseUrl/$reportsRoute?$studentIdColumn=$studentId");
+    final uri =
+        Uri.parse("$baseUrl/$reportsRoute?$reportUidFromColumn=$uidFrom");
     try {
       final response = await http.get(
         uri,
@@ -71,9 +72,9 @@ class ReportApi {
     return reports;
   }
 
-  Future<List<Report>> getReportByTutorId(int tutorId) async {
+  Future<List<Report>> getReportByUidTo(int uidTo) async {
     List<Report> reports = [];
-    final uri = Uri.parse("$baseUrl/$reportsRoute?$tutorIdColumn=$tutorId");
+    final uri = Uri.parse("$baseUrl/$reportsRoute?$reportUidToColumn=$uidTo");
     try {
       final response = await http.get(
         uri,
@@ -91,11 +92,10 @@ class ReportApi {
     return reports;
   }
 
-  Future<List<Report>> getReportsByStudentAndTutorId(
-      int studentId, int tutorId) async {
+  Future<List<Report>> getReportsByBothParties(int uidFrom, int uidTo) async {
     List<Report> reports = [];
     final uri = Uri.parse(
-        "$baseUrl/$reportsRoute?$studentIdColumn=$studentId&$tutorIdColumn=$tutorId");
+        "$baseUrl/$reportsRoute?$reportUidFromColumn=$uidFrom&$reportUidToColumn=$uidTo");
     try {
       final response = await http.get(
         uri,

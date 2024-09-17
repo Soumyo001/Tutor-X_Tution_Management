@@ -32,8 +32,8 @@ class _RecentStudentPostsState extends State<RecentStudentPosts> {
       height: 0.45 * screenSize.height,
       width: screenSize.width * 0.55,
       child: FutureBuilder(
-        future:
-            StudentPostApi().getStudentPostsByFilter(null, null, null, null),
+        future: StudentPostApi()
+            .getStudentPostsByFilter(null, null, null, null, null),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             WidgetsBinding.instance.addPostFrameCallback((_) {

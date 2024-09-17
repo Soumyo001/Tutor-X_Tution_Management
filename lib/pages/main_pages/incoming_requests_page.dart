@@ -71,123 +71,145 @@ class _RequestsState extends State<Requests> {
                 if (snapshot.connectionState == ConnectionState.done) {
                   _requestController.requests = snapshot.data as List<Request>;
                   if (_requestController.requests.isNotEmpty) {
-                    return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: _requestController.requests.length,
-                      itemBuilder: (context, index) {
-                        final r = _requestController.requests[index];
-                        return FutureBuilder(
-                          future: UserApi().getUserById(r.uidFrom),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              final user = snapshot.data as User;
-                              if (r.isFromTutor) {
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0, vertical: 8.0),
-                                  child: RequestTutorData(
-                                    r: r,
-                                    user: user,
-                                    onAccept: () async {
-                                      final request = await RequestApi()
-                                          .getRequestByBothParties(
-                                              r.uidFrom, r.uidTo);
-                                      if (request.isNotEmpty) {
-                                        request.first.requestStatus =
-                                            RequestStatus.accept;
-                                        request.first.requestDate =
-                                            DateTime.now().toString();
-                                        final response =
-                                            await RequestApi().updateRequest(
-                                          requestId: request.first.requestId,
-                                          body: request.first.toJson(),
-                                        );
-                                        if (!(response.statusCode >= 200 &&
-                                            response.statusCode <= 299)) {
-                                          await showErrorDialog(context,
-                                              'There was a problem accepting your friend request');
-                                        }
-                                      } else {
-                                        await showErrorDialog(context,
-                                            'Could not find friend request');
-                                      }
-                                    },
-                                    onDecline: () async {
-                                      final result =
-                                          await showConfirmationDialog(context,
-                                              'Cancel Friend Request ?');
-                                      if (result) {
+                    return Obx(
+                      () => ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: _requestController.requests.length,
+                        itemBuilder: (context, index) {
+                          final r = _requestController.requests[index];
+                          return FutureBuilder(
+                            future: UserApi().getUserById(r.uidFrom),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                final user = snapshot.data as User;
+                                if (r.isFromTutor) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16.0, vertical: 8.0),
+                                    child: RequestTutorData(
+                                      r: r,
+                                      user: user,
+                                      onAccept: () async {
                                         final request = await RequestApi()
                                             .getRequestByBothParties(
                                                 r.uidFrom, r.uidTo);
                                         if (request.isNotEmpty) {
                                           request.first.requestStatus =
-                                              RequestStatus.decline;
-                                          await RequestApi().deleteRequest(
-                                              request.first.requestId);
+                                              RequestStatus.accept;
+                                          request.first.requestDate =
+                                              DateTime.now().toString();
+                                          final response =
+                                              await RequestApi().updateRequest(
+                                            requestId: request.first.requestId,
+                                            body: request.first.toJson(),
+                                          );
+                                          if (!(response.statusCode >= 200 &&
+                                              response.statusCode <= 299)) {
+                                            await showErrorDialog(context,
+                                                'There was a problem accepting your friend request');
+                                          } else {
+                                            _requestController.requests
+                                                .removeWhere((element) =>
+                                                    element.requestId ==
+                                                    request.first.requestId);
+                                          }
+                                        } else {
+                                          await showErrorDialog(context,
+                                              'Could not find friend request');
                                         }
-                                      }
-                                    },
-                                  ),
-                                );
+                                      },
+                                      onDecline: () async {
+                                        final result =
+                                            await showConfirmationDialog(
+                                                context,
+                                                'Revoke Friend Request ?');
+                                        if (result) {
+                                          final request = await RequestApi()
+                                              .getRequestByBothParties(
+                                                  r.uidFrom, r.uidTo);
+                                          if (request.isNotEmpty) {
+                                            request.first.requestStatus =
+                                                RequestStatus.decline;
+                                            await RequestApi().deleteRequest(
+                                                request.first.requestId);
+                                            _requestController.requests
+                                                .removeWhere((element) =>
+                                                    element.requestId ==
+                                                    request.first.requestId);
+                                          }
+                                        }
+                                      },
+                                    ),
+                                  );
+                                } else {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16.0, vertical: 8.0),
+                                    child: RequestStudentData(
+                                      r: r,
+                                      user: user,
+                                      onAccept: () async {
+                                        final request = await RequestApi()
+                                            .getRequestByBothParties(
+                                                r.uidFrom, r.uidTo);
+                                        if (request.isNotEmpty) {
+                                          request.first.requestStatus =
+                                              RequestStatus.accept;
+                                          request.first.requestDate =
+                                              DateTime.now().toString();
+                                          final response =
+                                              await RequestApi().updateRequest(
+                                            requestId: request.first.requestId,
+                                            body: request.first.toJson(),
+                                          );
+                                          if (!(response.statusCode >= 200 &&
+                                              response.statusCode <= 299)) {
+                                            await showErrorDialog(context,
+                                                'There was a problem accepting your friend request');
+                                          } else {
+                                            _requestController.requests
+                                                .removeWhere((element) =>
+                                                    element.requestId ==
+                                                    request.first.requestId);
+                                          }
+                                        } else {
+                                          await showErrorDialog(context,
+                                              'Could not find friend request');
+                                        }
+                                      },
+                                      onDecline: () async {
+                                        final result =
+                                            await showConfirmationDialog(
+                                                context,
+                                                'Cancel Friend Request ?');
+                                        if (result) {
+                                          final request = await RequestApi()
+                                              .getRequestByBothParties(
+                                                  r.uidFrom, r.uidTo);
+                                          if (request.isNotEmpty) {
+                                            request.first.requestStatus =
+                                                RequestStatus.decline;
+                                            await RequestApi().deleteRequest(
+                                                request.first.requestId);
+                                            _requestController.requests
+                                                .removeWhere((element) =>
+                                                    element.requestId ==
+                                                    request.first.requestId);
+                                          }
+                                        }
+                                      },
+                                    ),
+                                  );
+                                }
                               } else {
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0, vertical: 8.0),
-                                  child: RequestStudentData(
-                                    r: r,
-                                    user: user,
-                                    onAccept: () async {
-                                      final request = await RequestApi()
-                                          .getRequestByBothParties(
-                                              r.uidFrom, r.uidTo);
-                                      if (request.isNotEmpty) {
-                                        request.first.requestStatus =
-                                            RequestStatus.accept;
-                                        request.first.requestDate =
-                                            DateTime.now().toString();
-                                        final response =
-                                            await RequestApi().updateRequest(
-                                          requestId: request.first.requestId,
-                                          body: request.first.toJson(),
-                                        );
-                                        if (!(response.statusCode >= 200 &&
-                                            response.statusCode <= 299)) {
-                                          await showErrorDialog(context,
-                                              'There was a problem accepting your friend request');
-                                        }
-                                      } else {
-                                        await showErrorDialog(context,
-                                            'Could not find friend request');
-                                      }
-                                    },
-                                    onDecline: () async {
-                                      final result =
-                                          await showConfirmationDialog(context,
-                                              'Cancel Friend Request ?');
-                                      if (result) {
-                                        final request = await RequestApi()
-                                            .getRequestByBothParties(
-                                                r.uidFrom, r.uidTo);
-                                        if (request.isNotEmpty) {
-                                          request.first.requestStatus =
-                                              RequestStatus.decline;
-                                          await RequestApi().deleteRequest(
-                                              request.first.requestId);
-                                        }
-                                      }
-                                    },
-                                  ),
-                                );
+                                return const SizedBox.shrink();
                               }
-                            } else {
-                              return const SizedBox.shrink();
-                            }
-                          },
-                        );
-                      },
+                            },
+                          );
+                        },
+                      ),
                     );
                   } else {
                     return Center(

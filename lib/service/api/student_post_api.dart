@@ -58,6 +58,7 @@ class StudentPostApi {
   }
 
   Future<List<StudentPost>> getStudentPostsByFilter(
+    int? studentId,
     String? location,
     int? studentMediumIndex,
     int? studentTypeIndex,
@@ -65,6 +66,9 @@ class StudentPostApi {
   ) async {
     List<StudentPost> studentPosts = [];
     final Map<String, String> queryParams = {};
+    if (studentId != null) {
+      queryParams[studentIdColumn] = studentId.toString();
+    }
     if (location != null) {
       queryParams[studentPostLocationColumn] = location;
     }

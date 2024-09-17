@@ -98,6 +98,22 @@ class _StudentProfileViewLeftState extends State<StudentProfileViewLeft> {
                     },
                     enableIcon: true,
                     loading: false),
+                ButtonIcon(
+                    icon: Icons.person,
+                    onPressed: () {
+                      Get.toNamed(WebRoutes.userFriendsPage);
+                    },
+                    enableIcon: true,
+                    label: 'Friends',
+                    loading: false),
+                ButtonIcon(
+                    icon: Icons.photo_size_select_actual_rounded,
+                    onPressed: () {
+                      Get.toNamed(WebRoutes.userPostPage);
+                    },
+                    label: 'Posts',
+                    enableIcon: true,
+                    loading: false),
               ],
             ),
             const Gap(15),

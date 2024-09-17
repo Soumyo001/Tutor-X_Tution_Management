@@ -5,20 +5,30 @@ class InputBox2 extends StatelessWidget {
   final TextEditingController controller;
   final int? maxLength;
   final double? fontSize;
+  final int? maxLines;
+  final bool alternativeColor;
+  final Color? customColor;
+  final Color? customFocusColor;
+  final bool disableMaxLengthAndLines;
   const InputBox2({
     super.key,
     required this.hintText,
     required this.controller,
     this.maxLength = 200,
     this.fontSize = 16.0,
+    this.alternativeColor = false,
+    this.disableMaxLengthAndLines = false,
+    this.maxLines = 4,
+    this.customColor,
+    this.customFocusColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
-      maxLength: maxLength,
-      maxLines: 4,
+      maxLength: disableMaxLengthAndLines ? null : maxLength,
+      maxLines: disableMaxLengthAndLines ? null : maxLines,
       style: TextStyle(
         color: Colors.black87,
         fontSize: fontSize,
@@ -27,10 +37,20 @@ class InputBox2 extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey.shade600),
+          borderSide: BorderSide(
+            color: alternativeColor
+                ? Colors.lightBlue
+                : (customColor != null ? customColor! : Colors.grey.shade600),
+          ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey.shade200),
+          borderSide: BorderSide(
+            color: alternativeColor
+                ? Colors.lightBlue
+                : (customFocusColor != null
+                    ? customFocusColor!
+                    : Colors.grey.shade200),
+          ),
         ),
       ),
     );

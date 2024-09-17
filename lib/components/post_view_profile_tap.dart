@@ -14,11 +14,13 @@ class PostViewProfileHolder extends StatefulWidget {
   final String? imageData;
   final String fullName;
   final int userId;
+  final bool tappable;
   const PostViewProfileHolder({
     super.key,
     required this.imageData,
     required this.fullName,
     required this.userId,
+    this.tappable = true,
   });
 
   @override
@@ -39,29 +41,34 @@ class _PostViewProfileHolderState extends State<PostViewProfileHolder> {
   Widget build(BuildContext context) {
     return InkWell(
       onHover: (value) {
-        isProfileHovered.value = value;
+        if (widget.tappable) {
+          isProfileHovered.value = value;
+        }
       },
       onTap: () async {
-        if (_userStaticsController.userId == widget.userId) {
-          if (_userStaticsController.userCategory == UserCategory.teacher) {
-            Get.toNamed(WebRoutes.tutorProfilePage);
+        if (widget.tappable) {
+          if (_userStaticsController.userId == widget.userId) {
+            if (_userStaticsController.userCategory == UserCategory.teacher) {
+              Get.toNamed(WebRoutes.tutorProfilePage);
+            } else {
+              Get.toNamed(WebRoutes.studentProfilePage);
+            }
           } else {
-            Get.toNamed(WebRoutes.studentProfilePage);
-          }
-        } else {
-          final user = await UserApi().getUserById(widget.userId);
-          if (user!.userType == UserCategory.teacher) {
-            final tutor = await TutorApi().getTutorByUserId(user.userId);
-            Get.toNamed(
-              WebRoutes.otherTutorProfilePage,
-              arguments: {'tutor_data': tutor.first, 'user_data': user},
-            );
-          } else {
-            final student = await StudentApi().getStudentByUserId(user.userId);
-            Get.toNamed(
-              WebRoutes.otherStudentProfilePage,
-              arguments: {'student_data': student.first, 'user_data': user},
-            );
+            final user = await UserApi().getUserById(widget.userId);
+            if (user!.userType == UserCategory.teacher) {
+              final tutor = await TutorApi().getTutorByUserId(user.userId);
+              Get.toNamed(
+                WebRoutes.otherTutorProfilePage,
+                arguments: {'tutor_data': tutor.first, 'user_data': user},
+              );
+            } else {
+              final student =
+                  await StudentApi().getStudentByUserId(user.userId);
+              Get.toNamed(
+                WebRoutes.otherStudentProfilePage,
+                arguments: {'student_data': student.first, 'user_data': user},
+              );
+            }
           }
         }
       },

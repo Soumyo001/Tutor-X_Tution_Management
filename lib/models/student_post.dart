@@ -1,16 +1,5 @@
-// To parse this JSON data, do
-//
-//     final studentPost = studentPostFromJson(jsonString);
-
-import 'dart:convert';
-
 import 'package:tutor_x_tution_management/data/enums.dart';
 import 'package:tutor_x_tution_management/utils/constants.dart';
-
-StudentPost studentPostFromJson(String str) =>
-    StudentPost.fromJson(json.decode(str));
-
-String studentPostToJson(StudentPost data) => json.encode(data.toJson());
 
 class StudentPost {
   int studentPostId;
